@@ -1,0 +1,244 @@
+/* General rules */
+.container-fluid {
+    height: 100vh;
+    width: 100vw;
+    font-family: "Raleway", sans-serif;
+}
+
+/* Error */
+div.container-fluid.error{
+    margin-top: 10vh;
+    height: 80vh;
+}
+#errCode{
+    font-size: 15vh;
+}
+div.container-fluid.error img{
+    width: 8vw;
+    height: 16vh;
+    float: left;
+    margin: 16px;
+}
+
+/* Register */
+.registerLogin{
+    height: 50vh;
+    margin-top: 20vh;
+    width: 60vw; 
+
+}
+
+.registerLogin .panel-heading{
+    background-color: #3498db;
+    border-radius: 0;
+    color: white;
+    height: 50px;    
+}
+
+.registerLogin .panel-title{
+    font: white;
+    margin-top: 0.6vh;
+    text-align: center;
+    font-size: 3vh;
+}
+
+.registerLogin .login-panel{
+    border-radius: 0;
+    border: none;
+}
+
+.registerLogin .panel-body{
+    border: none;
+    box-shadow: none;
+}
+
+.registerLogin .btn{
+    border-radius: 0;
+    background-color: #3498db;
+    color: white;   
+}
+
+.registerLogin .switch{
+    margin-top: 2vh;
+}
+
+/* Navbar */
+nav .container-fluid{
+    height: 8vh;
+}
+
+ul.nav.navbar-nav a:hover {
+    background-color: #29A5F1;
+    color: #fff;
+}
+
+/* Landing View */
+.landing {
+    height: 100vh;
+    text-align: center;
+    color: #fff;
+    font-family: "Raleway", sans-serif;
+    background-image: url('media/images/graph3.jpg');
+}
+
+.landing .title{
+    font-size: 20vh;
+    margin-top: 20vh;
+}
+
+.landing .slogan{
+    font-size: 3vh;
+}
+
+.landing hr {
+    width: 80vw;
+    margin: auto;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    border: 1px solid #7f8c8d;
+}
+
+.landing .links a {
+    display: inline-block;
+    width: 10vw;
+    height: 7vh;
+    font-size: 3vh;
+    padding-top: 1vh;
+    color: #fff;
+    background-color: #2c3e50;
+    text-align: center;
+    text-decoration: none;
+}
+
+.landing .links a:hover{
+    background-color: #18cace;
+}
+
+/* Dashboard View */
+.dashboard{
+    margin-top: 10vh;
+}
+
+.grid {
+    padding-top: 5vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dashboard .grid .item{
+    width: 20vw;
+    text-align: center;
+    background-color: #3498db;/*#0CB4DA;*/
+    flex: 1;
+    margin: 0px 20px 0px 0px;
+}
+.dashboard .grid .item:nth-child(3){
+    margin: 0px 0px 0px 0px;
+}
+
+.dashboard .grid .item:hover{
+    cursor: pointer;
+    background-color: #2980b9;
+}
+
+.dashboard .grid .item .icon{
+    padding: 8px;
+}
+
+.dashboard .grid .item .caption{
+    width: 100%;
+    background-color: #fff;
+}
+
+.dashboard .grid .item .caption span:hover{
+    font-size: 2.4vh;
+    color: #3498db;
+}
+
+/* Datasets */
+.upload-btn{
+    margin-top: 10vh;
+    height: 10vh;
+    background-color: #29A5F1;
+    border: none;
+}
+.upload-btn:hover{
+    color: #fff;
+    background-color: #18cace;
+}
+.datasets {
+    margin-top: 16vh;
+}
+
+.datasets .grid .item:hover{
+    cursor: pointer;
+    background-color: #2980b9;
+}
+
+.datasets .grid .item{
+    width: 20vw;
+    text-align: center;
+    background-color: #3498db;/*#0CB4DA;*/
+    flex: 1;
+    margin: 0px 20px 0px 0px;
+}
+.datasets .grid .item:nth-child(2){
+    margin: 0px 0px 0px 0px;
+}
+
+.datasets .grid .item .caption{
+    width: 100%;
+    background-color: #fff;
+}
+
+/* Active datasets */
+.active-dataset{
+    margin-top: 16vh;
+}
+
+.active-dataset .grid .item:hover{
+    cursor: pointer;
+    background-color: #2980b9;
+}
+
+.active-dataset .grid .item{
+    width: 20vw;
+    text-align: center;
+    background-color: #3498db;/*#0CB4DA;*/
+    flex: 1;
+    margin: 0px 20px 0px 0px;
+}
+.active-dataset .grid .item:nth-child(2){
+    margin: 0px 0px 0px 0px;
+}
+
+.active-dataset .grid .item .caption{
+    width: 100%;
+    background-color: #fff;
+}
+
+.close-active-dataset{
+    float: right;
+}
+.close-active-dataset:hover{
+    cursor: pointer;
+}
+.active-dataset .grid.summary .item:hover{
+    cursor: default;
+}
+
+.active-dataset .grid.summary .item:nth-child(2){
+    margin: 0px 20px 0px 0px;
+}
+
+.active-dataset .grid.summary .item:nth-child(3){
+    margin: 0px 0px 0px 0px;
+}
+
+.active-dataset .grid.summary .item .icon{
+    color: #fff;
+}
+
+.trendHistory{
+    padding: 16px;
+}

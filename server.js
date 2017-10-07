@@ -41,7 +41,7 @@ app.post('/registerNewUser', function (req, res) {
 	PythonShell.run('/scripts/repository/User_Register.py', options, function (err, results) {
 		if (err)
 		{
-			console.log("Error uploading dataset: " + err);
+			console.log("User registration failed: " + err);
 			res.write("failed");
 			res.end();
 		}
@@ -50,6 +50,45 @@ app.post('/registerNewUser', function (req, res) {
 			console.log("User Register successful. Output: " + results);
 			res.write("success");
 			res.end();
+		}
+	});
+})
+
+//Execute login
+app.post('/executeLogin', function (req, res) {
+	
+	//{\"email\":\"jason@gmail.com\",\"password\":\"test_pass\"}
+	
+	console.log("Login req received. Email: " + req.body.user.email);
+	
+	var sendR = '{\"email\":\"' + req.body.user.email + '\",\"password\":\"' + req.body.user.password + '\"}';
+	
+	var options = {
+		mode: 'text',
+		pythonPath: 'python3',
+		args: [sendR]
+	};
+	 
+	PythonShell.run('/scripts/repository/User_Auth.py', options, function (err, results) {	
+		if (err)
+		{
+			console.log("An error occured while trying to login: " + err);
+			res.write("failed");
+			res.end();
+		}
+		else
+		{
+			console.log("User Login Returned. Output: " + results);
+			if (results == "True")
+			{
+				res.write("success");
+				res.end();
+			}
+			else
+			{
+				res.write("failed");
+				res.end();
+			}
 		}
 	});
 })

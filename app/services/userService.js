@@ -6,5 +6,10 @@ app.factory('UserService', ['$http', function($http){
         return $http.post("/registerNewUser", {"user": newUser});
     };
 
+    userServiceObj.login = function(user){
+    	if(user == null){ return false; }
+    	return $http.post("/executeLogin", {"user": user});
+    }
+
     return userServiceObj;
 }]);

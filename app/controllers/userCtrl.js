@@ -8,7 +8,7 @@ app.controller('UserController', ['$scope', '$location', function UserController
             datasetName: "",
             attributes: [],
             recordCount: -1,
-            uploadDate: "",
+            uploadDate: "", dd/mm/yyyy
             trendProfileHistory: [] -> { trendProfileID: -1, nr_clusters: -1, algorithmName: "", dateGenerated: "" }
         }
     */

@@ -1,4 +1,4 @@
-app.controller('LoginController', ['$scope', '$route', '$location', 'UserService', function LoginController($scope, $route, $location, UserService){
+app.controller('LoginController', ['$scope', '$rootScope', '$route', '$location', 'UserService', function LoginController($scope, $rootScope, $route, $location, UserService){
 		$scope.email = "";
 		$scope.password = "";
 
@@ -10,9 +10,10 @@ app.controller('LoginController', ['$scope', '$route', '$location', 'UserService
 			UserService.login(user).then(
 				function success(response){
 		            if(response && response.status == 200 && response.data == "success"){
-		                    $location.url('/dashboard');
+							$rootScope.$emit('activeUser', $scope.email);
+							$location.url('/dashboard');
 		                    return true;
-	                } 
+	                }
 	                else if(response && response.status == 200 && response.data == "failed"){
 		                window.setTimeout(function(){
 		                    $route.reload();

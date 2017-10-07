@@ -71,8 +71,9 @@ app.post('/retrieveDatasets', function(req, res){
 
 		} else {
 			console.log("Datasets successfully fetched: " + results);
-			res.write(results);
-			res.end();
+			//res.write(results);
+            res.write("");
+            res.end();
 		}
 	});
 });

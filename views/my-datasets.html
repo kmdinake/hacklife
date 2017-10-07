@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="w3-card-4 alert alert-warning" ng-if="datasets.length == 0">
-            <span>You have no datasets!</span>
+            <span>You have no datasets!<br />Try uploading your first dataset or add datasets from here: <a href="#/explore">Explore</a></span>
         </div>
     </div>
     <div ng-if="activeDataset" class="active-dataset w3-animate-right">
@@ -59,7 +59,10 @@
         <div ng-if="showTrendProfileHistory" class="w3-card-4 w3-animate-left trendHistory">
             <div class="close-active-dataset" ng-click="showTrendHistory(false);"><img src="../css/media/icons/c_b_48.png"/></div>
             <h2>Trend Profile History</h2>
-            <div class="table-responsive">
+            <div class="w3-card-4 alert alert-warning" ng-if="activeDataset.trendProfileHistory.length == 0">
+                <span>You have no trend profile history with this dataset!<br />First <a href="#/data_tools">generate trends</a> on this data.</span>
+            </div>
+            <div class="table-responsive" ng-if="activeDataset.trendProfileHistory.length > 0">
                 <table class="table table-hover">
                     <thead>
                         <tr>

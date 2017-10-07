@@ -3,13 +3,17 @@ app.factory('UserService', ['$http', function($http){
 
     userServiceObj.register = function(newUser){
         if(newUser == null){ return false; }
-        return $http.post("/registerNewUser", {"user": newUser});
+        return $http.post("/registerNewUser", { user: newUser });
     };
 
     userServiceObj.login = function(user){
     	if(user == null){ return false; }
-    	return $http.post("/executeLogin", {"user": user});
+    	return $http.post("/executeLogin", { user: user });
     }
+
+    userServiceObj.getUserName = function(userEmail){
+        return $http.post('/getUserFullname', { userEmail: userEmail });
+    };
 
     return userServiceObj;
 }]);

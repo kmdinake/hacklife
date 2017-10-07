@@ -6,7 +6,7 @@ app.factory('DataService', ['$http', function DataService($http){
     };
 
     factoryObj.changeDatasetAccessMod = function (dName, truth_val){
-        return $http.post('/changeDatasetAccessMod', { datasetName: dName, "isPublic": truth_val });   // queries Neo4j
+        return $http.post('/changeDatasetAccessMod', { datasetName: dName, isPublic: truth_val });   // queries Neo4j
     };
 
     factoryObj.removeDataset = function (dName){

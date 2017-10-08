@@ -39,14 +39,14 @@
                                 <ul>
                                     <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
                                       <span class="progress" ng-show="f.progress >= 0">
-                                        <div style="width:{{f.progress}}%"  
+                                        <div style="width:{{f.progress}}%"
                                             ng-bind="f.progress + '%'"></div>
                                       </span>
                                     </li>
                                     <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                                    </li> 
+                                    </li>
                                 </ul>
-                                
+
                                 <!-- END -->
 
                                 <div class="uploadInput">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
 
-                        
+
                         </br>
 
                     </div>
@@ -124,7 +124,7 @@
         </div>
         <div class="close-active-dataset" ng-click="setActiveDataset(null);"><img src="../css/media/icons/c_b_48.png"/></div>
         <div class="grid" style="clear:right" >
-            <div class="item w3-card-4" ng-click="showSampleData(true);">
+            <div class="item w3-card-4" ng-click="showSampleData(!showingSampleData);">
                 <div class="icon">
                     <img src="../css/media/icons/l_w_96.png" alt="view datasets"/>
                 </div>

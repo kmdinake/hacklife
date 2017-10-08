@@ -1,8 +1,70 @@
 <div class="container-fluid">
     <nav class="w3-card-2 navbar navbar-default navbar-fixed-top" ng-include="'views/nav.html'"></nav>
-    <button class="w3-card-4 w3-right upload-btn">
+    <button class="w3-card-4 w3-right upload-btn" data-toggle="modal" data-target="#uploadModal">
         Upload Dataset
     </button>
+    <div id="uploadModal" class="modal fade uploader" role="dialog">
+            <div class="modal-dialog uploader">
+
+                <!-- Modal content-->
+                <div class="modal-content uploader">
+                    <div class="modal-header">
+                        <div class="close-upload" style="float:right" data-dismiss="modal">
+                            <img src="../css/media/icons/c_b_48.png"/>
+                        </div>
+                        <h4 class="modal-title">Upload a dataset</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <span class="glyphicon glyphicon-cloud-upload"></span>
+                                <h3>File Uploader</h3>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar"></div>
+                                </div>
+                                <div>
+                                    <span>
+                                        <p>Please select a data file and a schema file. The data file should have the extension .csv, </p>
+                                    </span>
+                                </div>
+
+                                <!-- Test -->
+
+                                <button ngf-select="uploadFiles($files, $invalidFiles)"
+                                           ngf-max-height="1000" ngf-max-size="1000MB">
+                                      Select Files</button>
+
+                                <ul>
+                                    <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                                      <span class="progress" ng-show="f.progress >= 0">
+                                        <div style="width:{{f.progress}}%"  
+                                            ng-bind="f.progress + '%'"></div>
+                                      </span>
+                                    </li>
+                                    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                                    </li> 
+                                </ul>
+                                
+                                <!-- END -->
+
+                                <div class="uploadInput">
+                                    <span>Choose Files</span>
+                                    <input id="upload-input" type="file" name="uploads[]" multiple="multiple" class="uploadBtn">
+                                </div>
+                                <button class="btn upload-btn" type="button" class="executeUpload">Upload File</button>
+                            </div>
+                        </div>
+
+                        
+                        </br>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
     <div ng-if="!activeDataset" class="datasets w3-animate-top">
         <h1>My Datasets</h1>
         <div class="grid" ng-if="datasets.length > 0">

@@ -5,6 +5,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     $scope.datasets = [];
     $scope.activeDataset = null;
     $scope.showTrendProfileHistory = false;
+    $scope.showingSampleData = false;
 
     /* Helper Methods */
 
@@ -12,10 +13,43 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         $scope.showTrendProfileHistory = val;
     };
 
+    $scope.showSampleData = function(val){
+        DataService.getDataSamples($scope.activeDataset.datasetName).then(
+            function success(res){
+                if (res.status == 200){
+                    $scope.activeDataset.dataSamples = res.data;
+                } else {
+                    console.log(res.data);
+                    var msg = "Ooops! Well this is embarrassing. ";
+                    msg += "Something went wrong trying to retrieve data samples for ";
+                    msg += $scope.activeDataset.datasetName;
+                    msg += ". Please try again later.";
+                    var code = res.status;
+                    //$location.url('/error?errCode=' + code + '&errText=' + msg);
+                    return;
+                }
+            },
+            function failure(res){
+                console.log(res.data);
+                var msg = "Ooops! Well this is embarrassing. ";
+                msg += "Something went wrong trying to retrieve data samples for ";
+                msg += $scope.activeDataset.datasetName;
+                msg += ". Please try again later.";
+                var code = res.status;
+                //$location.url('/error?errCode=' + code + '&errText=' + msg);
+                return;
+            }
+        );
+        $scope.showingSampleData = val;
+    };
+
     $scope.setActiveDataset = function(dataset){
         $scope.activeDataset = dataset;
         if($scope.showTrendProfileHistory === true){
             $scope.showTrendHistory(false);
+        }
+        if($scope.showSampleData === true){
+            $scope.showSampleData(false);
         }
     };
 
@@ -24,7 +58,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     };
 
     $scope.getDatasets = function(){
-        DataService.getUserDatasets($scope.userEmail).then(
+        /*DataService.getUserDatasets($scope.userEmail).then(
             function success(res) {
                 if (res.status == 200){
                     if (res.data !== undefined && res.data !== null && res.data.my_data !== undefined){
@@ -52,8 +86,8 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                 return;
             }
         );
-
-        /*$scope.datasets = [
+        */
+        $scope.datasets = [
             {
                 datasetID: 1,
                 datasetName: "Iris",
@@ -78,10 +112,10 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                     { trendProfileID: 3, nr_clusters: 4, algorithmName: "KMeans", dateGenerated: "03/10/2017" }
                 ]
             }
-        ];*/
+        ];
     };
 
-    $scope.isPublic = function(datasetName, truth_val){
+    $scope.changeAccessMod = function(datasetName, truth_val){
         if (datasetName == "" || datasetName == null || truth_val == null) return;
         DataService.changeDatasetAccessMod(datasetName, truth_val).then(
             function success(res){

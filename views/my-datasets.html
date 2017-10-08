@@ -11,16 +11,16 @@
                     <img src="../css/media/icons/b_w_96.png" alt="view dataset"/>
                 </div>
                 <div class="actions">
-                    <div class="tooltip action  w3-animate-left">
+                    <div class="tooltip action  w3-animate-left" ng-click="changeAccessMod(d.datasetName, !d.isPublic);">
                         <img src="../css/media/icons/c_u_w_24.png" alt="change access modifier"/>
                         <span ng-if="!d.isPublic" class="tooltiptext">Make this dataset public</span>
                         <span ng-if="d.isPublic" class="tooltiptext">Make this dataset private</span>
                     </div>
-                    <div class="tooltip action  w3-animate-right">
+                    <div class="tooltip action  w3-animate-right" ng-click="downloadDataset(d.datasetName);">
                         <img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/>
                         <span class="tooltiptext">Download this dataset</span>
                     </div>
-                    <div class="tooltip action  w3-animate-left">
+                    <div class="tooltip action  w3-animate-left" ng-click="deleteDataset(d.datasetName);">
                         <img src="../css/media/icons/d_f_w_24.png" alt="delete dataset"/>
                         <span class="tooltiptext">Delete this dataset from your collection</span>
                     </div>
@@ -36,9 +36,33 @@
     </div>
     <div ng-if="activeDataset" class="active-dataset w3-animate-right">
         <h1>{{activeDataset.datasetName}}</h1>
+        <div ng-if="showingSampleData == true" class="w3-card-4 w3-animate-left viewData">
+            <div class="close-active-dataset" ng-click="showSampleData(!showingSampleData);"><img src="../css/media/icons/c_b_48.png"/></div>
+            <h2>Data Samples</h2>
+            <div class="w3-card-2 alert alert-warning" ng-if="activeDataset.dataSamples == null || activeDataset.dataSamples == []">
+                <span>This dataset has no sample data.</span>
+            </div>
+            <div class="table-responsive" ng-if="activeDataset.dataSamples.length > 0">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="a in activeDataset.attributes">{{a}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ds in activeDataset.dataSamples">
+                            <td ng-repeat="val in ds">{{val}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{activeDataset.recordCount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div class="close-active-dataset" ng-click="setActiveDataset(null);"><img src="../css/media/icons/c_b_48.png"/></div>
         <div class="grid" style="clear:right" >
-            <div class="item w3-card-4" ng-click="goRouteTo('/my_datasets');">
+            <div class="item w3-card-4" ng-click="showSampleData(true);">
                 <div class="icon">
                     <img src="../css/media/icons/l_w_96.png" alt="view datasets"/>
                 </div>

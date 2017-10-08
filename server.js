@@ -200,12 +200,10 @@ PythonShell.run('/scripts/repository/remove_dataset.py', options, function (err,
 app.post('/retrieveDataSamples', function (req, res) {
 	console.log("Retrieve data samples. Dataset: " + req.body.datasetName);
 
-	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
-
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		args: [sendPyReq]
+		args: [JSON.stringify(req.body)]
 	};
 
 
@@ -216,7 +214,7 @@ PythonShell.run('/scripts/repository/data_samples.py', options, function (err, r
 			res.end();
 		} else {
 			console.log("Dataset samples retrieved. Output: " + results);
-			res.write(results);
+			res.write(results[0]);
 			res.end();
 		}
 	});
@@ -256,7 +254,7 @@ app.post('/retrieveStats', function(req, res){
 		mode: 'text',
 		pythonPath: 'python3',
 		scriptPath: '',
-		args: [JSON.stringify(req.body.dataSetID)]
+		args: [JSON.stringify(req.body)]
 	};
 	 
 	PythonShell.run('/scripts/repository/retrieve_stats.py', options, function (err, results) {

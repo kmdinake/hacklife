@@ -13,8 +13,8 @@ app.factory('DataService', ['$http', function DataService($http){
         return $http.post('/removeDataset', { datasetName: dName }); // queries Mongo and Neo4j
     };
 
-    factoryObj.getDataSamples = function (dName){
-        return $http.post('/retrieveDataSamples', { datasetName: dName }); // queries Mongo
+    factoryObj.getDataSamples = function (dataSetID){
+        return $http.post('/retrieveDataSamples', { dataSetID: dataSetID }); // queries Mongo
     };
 
     factoryObj.hasLinkedTrendProfiles = function (dName){

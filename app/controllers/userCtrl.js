@@ -233,6 +233,18 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         );
     };
 
+    $scope.getData = function(dataSetID){
+        DataService.getDataSamples(dataSetID).then(
+            function success(res){
+                console.log('Successfully retrieved data for ' + dataSetID);
+                console.log(res.data);
+            },
+            function err(res){
+                console.log('Failed to retrieve data for ' + dataSetID);
+            }
+        );
+    };
+
     /* Main */
     $rootScope.$on('activeUser', function(event, data){
         $scope.userEmail = data;

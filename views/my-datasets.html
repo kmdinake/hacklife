@@ -72,13 +72,28 @@
                 <div class="icon">
                     <img src="../css/media/icons/b_w_96.png" alt="view dataset"/>
                 </div>
+                <div class="actions">
+                    <div class="tooltip action  w3-animate-left">
+                        <img src="../css/media/icons/c_u_w_24.png" alt="change access modifier"/>
+                        <span ng-if="!d.isPublic" class="tooltiptext">Make this dataset public</span>
+                        <span ng-if="d.isPublic" class="tooltiptext">Make this dataset private</span>
+                    </div>
+                    <div class="tooltip action  w3-animate-right">
+                        <img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/>
+                        <span class="tooltiptext">Download this dataset</span>
+                    </div>
+                    <div class="tooltip action  w3-animate-left">
+                        <img src="../css/media/icons/d_f_w_24.png" alt="delete dataset"/>
+                        <span class="tooltiptext">Delete this dataset from your collection</span>
+                    </div>
+                </div>
                 <div class="caption">
                     <span>{{d.datasetName}}</span>
                 </div>
             </div>
         </div>
         <div class="w3-card-4 alert alert-warning" ng-if="datasets.length == 0">
-            <span>You have no datasets!</span>
+            <span>You have no datasets!<br />Try uploading your first dataset or add datasets from here: <a href="#/explore">Explore</a></span>
         </div>
     </div>
     <div ng-if="activeDataset" class="active-dataset w3-animate-right">
@@ -106,7 +121,10 @@
         <div ng-if="showTrendProfileHistory" class="w3-card-4 w3-animate-left trendHistory">
             <div class="close-active-dataset" ng-click="showTrendHistory(false);"><img src="../css/media/icons/c_b_48.png"/></div>
             <h2>Trend Profile History</h2>
-            <div class="table-responsive">
+            <div class="w3-card-4 alert alert-warning" ng-if="activeDataset.trendProfileHistory.length == 0">
+                <span>You have no trend profile history with this dataset!<br />First <a href="#/data_tools">generate trends</a> on this data.</span>
+            </div>
+            <div class="table-responsive" ng-if="activeDataset.trendProfileHistory.length > 0">
                 <table class="table table-hover">
                     <thead>
                         <tr>

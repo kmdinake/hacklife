@@ -113,7 +113,7 @@ app.post('/executeLogin', function (req, res) {
 
 //New queries - User Service
 
-app.post('/getUserFullName', function (req,res)) {
+app.post('/getUserFullName', function (req,res){
 	console.log("Get user full name req received. Email: " + req.body.userEmail);
 
 	var sendPyReq = '{\"email\":\"' + req.body.userEmail + '\"}';
@@ -143,7 +143,7 @@ PythonShell.run('/scripts/repository/User_Full_Name.py', options, function (err,
 //New queries - Data Service
 
 //Check this query against the notes received
-app.post('/changeDatasetAccessMod', function (req, res)) {
+app.post('/changeDatasetAccessMod', function (req, res) {
 	console.log("Change dataset access modifier request received. Dataset: " + req.body.datasetName);
 
 	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
@@ -170,7 +170,7 @@ PythonShell.run('/scripts/repository/check_dataset_access.py', options, function
 });
 
 
-app.post('/removeDataset', function (req, res)) {
+app.post('/removeDataset', function (req, res) {
 	console.log("Remove dataset request received. Dataset: " + req.body.datasetName);
 
 	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
@@ -197,7 +197,7 @@ PythonShell.run('/scripts/repository/remove_dataset.py', options, function (err,
 });
 
 // Not sure what to do here
-app.post('/retrieveDataSamples', function (req, res)) {
+app.post('/retrieveDataSamples', function (req, res) {
 	console.log("Retrieve data samples. Dataset: " + req.body.datasetName);
 
 	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
@@ -224,7 +224,7 @@ PythonShell.run('/scripts/repository/data_samples.py', options, function (err, r
 });
 
 
-app.post('/hasLinkedTrendProfiles', function (req, res)) {
+app.post('/hasLinkedTrendProfiles', function (req, res) {
 	console.log("Check if connected to trend profile. Dataset: " + req.body.datasetName);
 
 	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
@@ -248,6 +248,29 @@ PythonShell.run('/scripts/repository/check_linked_tp.py', options, function (err
 		}
 	});
 
+});
+
+// Retrieve stats for a specific dataset
+app.post('/retrieveStats', function(req, res){
+	var options = {
+		mode: 'text',
+		pythonPath: 'python3',
+		scriptPath: '',
+		args: [JSON.stringify(req.body.dataSetID)]
+	};
+	 
+	PythonShell.run('/scripts/repository/retrieve_stats.py', options, function (err, results) {
+		if (err)
+		{
+			console.log("Cannot retrieve stats: " + err);
+		}
+		else
+		{
+			console.log(results);
+			res.write(results[0]);
+	  		res.end();
+		}
+	});
 });
 
 

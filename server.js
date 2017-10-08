@@ -201,7 +201,7 @@ PythonShell.run('/scripts/repository/remove_dataset.py', options, function (err,
 
 // Not sure what to do here
 app.post('/retrieveDataSamples', function (req, res) {
-	console.log("Retrieve data samples. Dataset: " + req.body.datasetName);
+	console.log("Retrieve data samples. Dataset: " + req.body.dataSetID);
 
 	var options = {
 		mode: 'text',
@@ -218,8 +218,8 @@ PythonShell.run('/scripts/repository/data_samples.py', options, function (err, r
 			res.end();
 		} else {
 			console.log("Dataset samples retrieved. Output: " + results);
-			res.setHeader('Content-Type', 'application/json');
-			res.write(results);
+			//res.setHeader('Content-Type', 'application/json');
+			res.write(results[0]);
 			res.end();
 		}
 	});

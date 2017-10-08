@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.1",
-    "python-shell": "^0.4.0"
+    "python-shell": "^0.4.0",
+    "ng-file-upload": "^12.2.13"
   }
 }

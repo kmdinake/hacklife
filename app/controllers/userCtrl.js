@@ -253,7 +253,19 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                 return;
             }
         );
-    }
+    };
+
+    $scope.getStats = function(dataSetID){
+        DataService.getStats(dataSetID).then(
+            function success(res){
+                console.log('Successfully retrieved stats for ' + dataSetID);
+                console.log(res.data);
+            },
+            function err(res){
+                console.log('Failed to retrieve stats for ' + dataSetID);
+            }
+        );
+    };
 
     /* Main */
     $rootScope.$on('activeUser', function(event, data){

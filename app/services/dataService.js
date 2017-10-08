@@ -21,5 +21,9 @@ app.factory('DataService', ['$http', function DataService($http){
         return $http.post('/hasLinkedTrendProfiles', { datasetName: dName }); // queries Neo4j
     };
 
+    factoryObj.getStats = function(dataSetID){
+        return $http.post("/retrieveStats", { dataSetID: dataSetID });
+    };
+
     return factoryObj;
 }]);

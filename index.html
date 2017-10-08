@@ -17,6 +17,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="app/lib/angular.min.js"></script>
         <script src="app/lib/angular-route.min.js"></script>
+        <script src="node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script> <!-- for no html5 browsers support -->
+        <script src="node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
 
         <!-- Angular App -->
         <script src="app/app.js"></script>
@@ -32,6 +34,7 @@
         <script src="app/controllers/loginCtrl.js"></script>
         <script src="app/controllers/userCtrl.js"></script>
         <script src="app/controllers/errorCtrl.js"></script>
+        <script src="app/controllers/uploadCtrl.js"></script>
     </head>
     <body ng-view>
 

@@ -7,7 +7,7 @@ data_set_id = input['dataSetID']
 
 database_name = 'Data'
 collection_name = data_set_id + '_stats'
-#print(collection_name)
+# print(collection_name)
 attrib_projection = {'_id': False}
 
 # Create a MongoDB client
@@ -20,5 +20,5 @@ db = client[database_name]
 collection = db[collection_name]
 
 stats = json.dumps(list(collection.find(projection=attrib_projection)))
-#stats = stats.replace('\"','')
+# stats = stats.replace('\"','')
 print(stats)

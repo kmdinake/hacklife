@@ -5,6 +5,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     $scope.datasets = [];
     $scope.activeDataset = null;
     $scope.showTrendProfileHistory = false;
+    $scope.showingSampleData = false;
 
     /* Helper Methods */
 
@@ -12,10 +13,45 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         $scope.showTrendProfileHistory = val;
     };
 
+    $scope.showSampleData = function(val){
+        if (val == true){
+            DataService.getDataSamples($scope.activeDataset.datasetName).then(
+                function success(res){
+                    if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
+                        $scope.activeDataset.dataSamples = JSON.parse(res.data).result;
+                    } else {
+                        var msg = "Ooops! Well this is embarrassing. ";
+                        msg += "Something went wrong trying to retrieve data samples for ";
+                        msg += $scope.activeDataset.datasetName;
+                        msg += ". Please try again later.";
+                        var code = 400;
+                        console.log(res.data + " <> " + code + " <> " + msg);
+                        //$location.url('/error?errCode=' + code + '&errText=' + msg);
+                        return;
+                    }
+                },
+                function failure(res){
+                    console.log(res.data);
+                    var msg = "Ooops! Well this is embarrassing. ";
+                    msg += "Something went wrong trying to retrieve data samples for ";
+                    msg += $scope.activeDataset.datasetName;
+                    msg += ". Please try again later.";
+                    var code = res.status;
+                    //$location.url('/error?errCode=' + code + '&errText=' + msg);
+                    return;
+                }
+            );
+        }
+        $scope.showingSampleData = val;
+    };
+
     $scope.setActiveDataset = function(dataset){
         $scope.activeDataset = dataset;
         if($scope.showTrendProfileHistory === true){
             $scope.showTrendHistory(false);
+        }
+        if($scope.showSampleData === true){
+            $scope.showSampleData(false);
         }
     };
 
@@ -24,7 +60,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     };
 
     $scope.getDatasets = function(){
-        DataService.getUserDatasets($scope.userEmail).then(
+        /*DataService.getUserDatasets($scope.userEmail).then(
             function success(res) {
                 if (res.status == 200){
                     if (res.data !== undefined && res.data !== null && res.data.my_data !== undefined){
@@ -52,8 +88,8 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                 return;
             }
         );
-
-        /*$scope.datasets = [
+        */
+        $scope.datasets = [
             {
                 datasetID: 1,
                 datasetName: "Iris",
@@ -73,19 +109,19 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                 recordCount: 2000,
                 uploadDate: '9/10/2017',
                 trendProfileHistory: [
-                    { trendProfileID: 1, nr_clusters: 4, algorithmName: "KMeans", dateGenerated: "0/09/2017" },
+                    { trendProfileID: 1, nr_clusters: 4, algorithmName: "KMeans", dateGenerated: "02/09/2017" },
                     { trendProfileID: 2, nr_clusters: 4, algorithmName: "LVQ", dateGenerated: "09/09/2017" },
                     { trendProfileID: 3, nr_clusters: 4, algorithmName: "KMeans", dateGenerated: "03/10/2017" }
                 ]
             }
-        ];*/
+        ];
     };
 
-    $scope.isPublic = function(datasetName, truth_val){
+    $scope.changeAccessMod = function(datasetName, truth_val){
         if (datasetName == "" || datasetName == null || truth_val == null) return;
         DataService.changeDatasetAccessMod(datasetName, truth_val).then(
             function success(res){
-                if (res.status == 200 && res.data == "success"){
+                if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
                     // alert the user that the change succeeded
                     $scope.getDatasets();
                 } else {
@@ -93,7 +129,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                     var msg = "Ooops! Well this is embarrassing. ";
                     msg += "Something went wrong trying to share your dataset. ";
                     msg += "Please try again later.";
-                    var code = res.status;
+                    var code = 400;
                     $location.url('/error?errCode=' + code + '&errText=' + msg);
                     return;
                 }
@@ -114,14 +150,15 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         if (datasetName == "" || datasetName == null) return;
         DataService.getDataSamples(datasetName).then(
             function success(res){
-                if (res.status == 200){
+                if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
                     // Deal with the file to download
+                    console.log("now download the file!");
                 } else {
                     console.log(res.data);
                     var msg = "Ooops! Well this is embarrassing. ";
                     msg += "Something went wrong trying to download " + datasetName;
                     msg += ". Please try again later.";
-                    var code = res.status;
+                    var code = 400;
                     $location.url('/error?errCode=' + code + '&errText=' + msg);
                     return;
                 }
@@ -142,7 +179,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         if (datasetName == "" || datasetName == null) return false;
         DataService.hasLinkedTrendProfiles(datasetName).then(
             function success(res){
-                if (res.status == 200 && res.status == "true"){
+                if (res.status == 200 && res.data != undefined && JSON.parse(res.data).isLinked == "true"){
                     return false; // it is unsafe because it has links
                 } else {
                     return true; // it is safe because it has no links
@@ -171,7 +208,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                     msg += "Something went wrong trying to delete ";
                     msg += "the following dataset: " + datasetName;
                     msg += ". Please try again later.";
-                    var code = res.status;
+                    var code = 400;
                     $location.url('/error?errCode=' + code + '&errText=' + msg);
                     return false;
                 }
@@ -191,7 +228,15 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
 
     $scope.deleteDataset = function(datasetName){
         if (datasetName == "" || datasetName == null) return;
-        if (!$scope.isSafeToRemove(datasetName)) return;
+        if (!$scope.isSafeToRemove(datasetName)){
+            var msg = "Ooops! Well this is embarrassing. ";
+            msg += "Something went wrong trying to delete ";
+            msg += "the following dataset: " + datasetName;
+            msg += ". Please try again later.";
+            var code = 400;
+            $location.url('/error?errCode=' + code + '&errText=' + msg);
+            return;
+        }
         $scope.removeDataset(datasetName);
         return;
     };
@@ -204,7 +249,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         UserService.getUserName(userEmail).then(
             function success(res){
                 if(res.status == 200){
-                    $scope.userFullname = res.data;
+                    $scope.userFullname = JSON.parse(res.data[0]).fullname;
                 } else {
                     console.log("User auth failed in get user name");
                     console.log(res);
@@ -246,10 +291,17 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     };
 
     /* Main */
-    $rootScope.$on('activeUser', function(event, data){
+    var unbind = $rootScope.$on('activeUser', function(event, data){
         $scope.userEmail = data;
         $scope.getUserName(data);
     });
+
+    $scope.$on('$destroy', unbind);
+
+    if ($location.path() == "/dashboard" && $scope.userEmail == ""){
+        $scope.userEmail = sessionStorage.getItem("userEmail");
+        $scope.getUserName($scope.userEmail);
+    }
 
     if ($location.path() == "/my_datasets"){
         $scope.getDatasets();

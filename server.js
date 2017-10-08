@@ -132,7 +132,8 @@ PythonShell.run('/scripts/repository/User_Full_Name.py', options, function (err,
 			res.end();
 		} else {
 			console.log("User Full Name Returned. Output: " + results);
-			res.write(results);
+			res.setHeader('Content-Type', 'application/json');
+			res.write(JSON.stringify(results));
 			res.end();
 		}
 	});
@@ -146,7 +147,7 @@ PythonShell.run('/scripts/repository/User_Full_Name.py', options, function (err,
 app.post('/changeDatasetAccessMod', function (req, res) {
 	console.log("Change dataset access modifier request received. Dataset: " + req.body.datasetName);
 
-	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\" + ", \"access\":" + req.body.truth_val}';
+	var sendPyReq = '{\"dataset\": \"' + req.body.datasetName + '\", \"access\": \"' + req.body.truth_val + '\"}';
 
 	var options = {
 		mode: 'text',
@@ -162,7 +163,8 @@ PythonShell.run('/scripts/repository/change_dataset_access.py', options, functio
 			res.end();
 		} else {
 			console.log("Dataset access modifier retrieved. Output: " + results);
-			res.write(results);
+			res.setHeader('Content-Type', 'application/json');
+			res.write(JSON.stringify(results));
 			res.end();
 		}
 	});
@@ -189,7 +191,8 @@ PythonShell.run('/scripts/repository/remove_dataset.py', options, function (err,
 			res.end();
 		} else {
 			console.log("Dataset deleted. Output: " + results);
-			res.write(results);
+			res.setHeader("Content-Type", "application/json");
+			res.write(JSON.stringify(results));
 			res.end();
 		}
 	});
@@ -210,11 +213,13 @@ app.post('/retrieveDataSamples', function (req, res) {
 PythonShell.run('/scripts/repository/data_samples.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to retrieve data samples: " + err);
+			console.log(results);
 			res.write("failed");
 			res.end();
 		} else {
 			console.log("Dataset samples retrieved. Output: " + results);
-			res.write(results[0]);
+			res.setHeader('Content-Type', 'application/json');
+			res.write(results);
 			res.end();
 		}
 	});
@@ -241,7 +246,8 @@ PythonShell.run('/scripts/repository/check_linked_tp.py', options, function (err
 			res.end();
 		} else {
 			console.log("Linked trend profiles chcked. Output: " + results);
-			res.write(results);
+			res.setHeader('Content-Type', 'application/json');
+			res.write(JSON.stringify(results));
 			res.end();
 		}
 	});
@@ -256,7 +262,7 @@ app.post('/retrieveStats', function(req, res){
 		scriptPath: '',
 		args: [JSON.stringify(req.body)]
 	};
-	 
+
 	PythonShell.run('/scripts/repository/retrieve_stats.py', options, function (err, results) {
 		if (err)
 		{
@@ -270,7 +276,3 @@ app.post('/retrieveStats', function(req, res){
 		}
 	});
 });
-
-
-
-

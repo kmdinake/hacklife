@@ -84,15 +84,15 @@ div.container-fluid.error img{
 
 .actions .action:nth-child(1){
     background-color: #64B5F6;
-    margin-top: -13.5vh;
+    margin-top: -14vh;
 }
 .actions .action:nth-child(2){
     background-color: #64B5F6;
-    margin-top: -8.7vh;
+    margin-top: -9vh;
 }
 .actions .action:nth-child(3){
     background-color: #64B5F6;
-    margin-top: -4vh;
+    margin-top: -4.2vh;
 }
 
 /* Register */
@@ -318,12 +318,16 @@ ul.nav.navbar-nav a:hover {
     padding: 16px;
 }
 
+.viewData{
+    padding: 16px;
+}
+
 /* Upload modal */
 .uploader{
     border-radius: 0;
     width: 40vw;
     margin: auto;
-    margin-top: 10vh; 
+    margin-top: 10vh;
 }
 
 .uploader .modal-title{
@@ -366,6 +370,3 @@ ul.nav.navbar-nav a:hover {
 .uploader .panel-body{
     border-radius: 0;
 }
-
-
-

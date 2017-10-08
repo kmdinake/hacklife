@@ -132,7 +132,8 @@ PythonShell.run('/scripts/repository/User_Full_Name.py', options, function (err,
 			res.end();
 		} else {
 			console.log("User Full Name Returned. Output: " + results);
-			res.write(results);
+			res.setHeader('Content-Type', 'application/json');
+			res.write(JSON.stringify(results));
 			res.end();
 		}
 	});
@@ -258,7 +259,7 @@ app.post('/retrieveStats', function(req, res){
 		scriptPath: '',
 		args: [JSON.stringify(req.body.dataSetID)]
 	};
-	 
+
 	PythonShell.run('/scripts/repository/retrieve_stats.py', options, function (err, results) {
 		if (err)
 		{
@@ -272,7 +273,3 @@ app.post('/retrieveStats', function(req, res){
 		}
 	});
 });
-
-
-
-

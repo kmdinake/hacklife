@@ -2,6 +2,10 @@ app.controller('LoginController', ['$scope', '$rootScope', '$route', '$location'
 		$scope.email = "";
 		$scope.password = "";
 
+		$scope.writeToSessionStorage = function(email){
+			window.sessionStorage.setItem("userEmail", email);
+		};
+
 		$scope.executeLogin = function(){
 			var user = {};
 			user.email = $scope.email;
@@ -11,6 +15,7 @@ app.controller('LoginController', ['$scope', '$rootScope', '$route', '$location'
 				function success(response){
 		            if(response && response.status == 200 && response.data == "success"){
 							$rootScope.$emit('activeUser', $scope.email);
+							$scope.writeToSessionStorage($scope.email);
 							$location.url('/dashboard');
 		                    return true;
 	                }

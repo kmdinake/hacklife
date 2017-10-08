@@ -238,7 +238,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         UserService.getUserName(userEmail).then(
             function success(res){
                 if(res.status == 200){
-                    $scope.userFullname = res.data;
+                    $scope.userFullname = JSON.parse(res.data[0]).fullname;
                 } else {
                     console.log("User auth failed in get user name");
                     console.log(res);
@@ -268,10 +268,17 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     };
 
     /* Main */
-    $rootScope.$on('activeUser', function(event, data){
+    var unbind = $rootScope.$on('activeUser', function(event, data){
         $scope.userEmail = data;
         $scope.getUserName(data);
     });
+
+    $scope.$on('$destroy', unbind);
+
+    if ($location.path() == "/dashboard" && $scope.userEmail == ""){
+        $scope.userEmail = sessionStorage.getItem("userEmail");
+        $scope.getUserName($scope.userEmail);
+    }
 
     if ($location.path() == "/my_datasets"){
         $scope.getDatasets();

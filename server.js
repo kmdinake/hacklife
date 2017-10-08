@@ -146,7 +146,7 @@ PythonShell.run('/scripts/repository/User_Full_Name.py', options, function (err,
 app.post('/changeDatasetAccessMod', function (req, res)) {
 	console.log("Change dataset access modifier request received. Dataset: " + req.body.datasetName);
 
-	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
+	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\" + ", \"access\":" + req.body.truth_val}';
 
 	var options = {
 		mode: 'text',
@@ -155,7 +155,7 @@ app.post('/changeDatasetAccessMod', function (req, res)) {
 	};
 
 
-PythonShell.run('/scripts/repository/check_dataset_access.py', options, function (err, results) {
+PythonShell.run('/scripts/repository/change_dataset_access.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to get dataset access modifier: " + err);
 			res.write("failed");

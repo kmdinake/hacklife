@@ -9,7 +9,8 @@
                 datasetName: "",
                 attributes: [],
                 recordCount: -1,
-                uploadDate: "", dd/mm/yyyy
+                uploadDate: "", dd/mm/yyyy,
+                access_mod: "",
                 trendProfileHistory: [] -> { trendProfileID: -1, nr_clusters: -1, algorithmName: "", dateGenerated: "" }
             }
         ]
@@ -40,15 +41,15 @@ db_query = 'MATCH (u:User { Email: \'' + email + '\'})-[z:Uses]->(d:DataSet) RET
 db_results = db.query(db_query, returns=client.Node)
 
 for z in db_results:
-    db_list.append(z[0]["Data_Set_ID"])
+    db_list.append([z[0]["Data_Set_ID"], z[0]["Data_Set_Name"]])
     db_nodes.append(z[0])
 
 count = 0
 while count < len(db_list):
-    return_string += "{\"datasetID\":" + "\"" + z[count]["Data_Set_ID"] + "\"," + "\"datasetName\":" + "\"" + z[count]["Data_Set_Name"] + "\","
+    return_string += "{\"datasetID\":" + "\"" + db_list[count][0] + "\"," + "\"datasetName\":" + "\"" + db_list[count][1] + "\","
 
     # Find all the attributes in a data set
-    attr_query = 'MATCH (d:DataSet { Data_Set_ID: \'' + db_list[count] + '\'})-[h:Has]->(a:Attribute) RETURN a'
+    attr_query = 'MATCH (d:DataSet { Data_Set_ID: \'' + db_list[count][0] + '\'})-[h:Has]->(a:Attribute) RETURN a'
     attr_query_result = db.query(attr_query, returns=client.Node)
 
     return_string += "\"attributes\": ["
@@ -59,13 +60,14 @@ while count < len(db_list):
         else:
             return_string += "\"],"
 
+    # return_string += "\"recordCount: \"" + db_nodes[count]["Record_Count"] + "\","
     return_string += "\"recordCount\": \"-1\","
     # @ TODO: change this to return the correct date attribute
     # return_string += "\"uploadDate: \"" + db_nodes[count]["Upload_Date"] + "\","
     return_string += "\"uploadDate\":" + "\"15/10/2017" + "\","
-
+    return_string += "\"access_mod\":\"" + db_nodes[count]["Access_Modifier"] + "\","
     query = 'MATCH (u:User { Email: \'' + email + '\'})-[z:Has]->(p:Trend_Profile)-[y:Has]->(d:DataSet ' \
-            '{ Data_Set_ID: \'' + db_list[count] + '\'}) RETURN p'
+            '{ Data_Set_ID: \'' + db_list[count][0] + '\'}) RETURN p'
     results = db.query(query, returns=client.Node)
     trend_p_array = list()
 
@@ -78,12 +80,12 @@ while count < len(db_list):
         # For each trend profile get all the trends
         trend_query = 'MATCH (u:User { Email: \'' + email + '\'})-[z:Has]->(p:Trend_Profile { Trend_Profile_ID:' \
                         ' ' + str(trend_p_id) + '})-[h:Has]->(t:Trend) RETURN t'
-        trend_results = db.query(trend_query,returns=(client.Node))
+        trend_results = db.query(trend_query, returns=(client.Node))
 
         return_string += " \"nr_clusters\": " + "\"" + str(len(trend_results)) + "\","
 
         algo_query = 'MATCH (u:User { Email: \'' + email + '\'})-[z:Has]->(p:Trend_Profile { Trend_Profile_ID: ' + str(x[0]["Trend_Profile_ID"]) + '})-[g:Generated_By]->(a:Algorithm) RETURN a'
-        algo_query_results = db.query(algo_query,returns=client.Node)
+        algo_query_results = db.query(algo_query, returns=client.Node)
 
         a = algo_query_results[0]
         return_string += "\"algorithmName\":" + "\"" + a[0]["Algorithm_ID"] + "\""
@@ -102,4 +104,4 @@ while count < len(db_list):
 
 return_string += "]}"
 
-
+print(return_string)

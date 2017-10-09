@@ -22,7 +22,7 @@
                                 <span class="glyphicon glyphicon-cloud-upload"></span>
                                 <h3>Schema upload</h3>
                                 <div>
-                                    <form> 
+                                    <form>
                                         <input ngf-select ngf-max-height="1000" value="Select Schema File" type="file" ng-model="fileToUp" kind=".csv">
                                         <button ng-click="uploadFiles('schema')">Upload Schema</button>
                                     </form>
@@ -56,15 +56,15 @@
                                 <span class="glyphicon glyphicon-cloud-upload"></span>
                                 <h3>Dataset upload</h3>
                                 <div>
-                                    <form> 
+                                    <form>
                                         <input ngf-select ngf-max-height="1000" value="Select File" type="file" ng-model="fileToUp" kind=".csv, .json, .xlsx, .xml">
-                                        <button ng-click="uploadFiles('dataset')">Upload Dataset</button>     
+                                        <button ng-click="uploadFiles('dataset')">Upload Dataset</button>
                                     </form>
                                     <span>
                                         <p>The file should be a csv, xlsx, xls, json or xml file.</p>
                                     </span>
                                 </div>
-                                
+
                             </div>
                         </div>
 
@@ -84,16 +84,16 @@
                     <img src="../css/media/icons/b_w_96.png" alt="view dataset"/>
                 </div>
                 <div class="actions">
-                    <div class="tooltip action  w3-animate-left" ng-click="changeAccessMod(d.datasetName, d.access_mod);">
+                    <div class="tooltip action  w3-animate-left" ng-click="changeAccessMod(d.datasetID, d.access_mod);">
                         <img src="../css/media/icons/c_u_w_24.png" alt="change access modifier"/>
                         <span ng-if="d.access_mod == 'private'" class="tooltiptext">Make this dataset public</span>
                         <span ng-if="d.access_mod == 'public'" class="tooltiptext">Make this dataset private</span>
                     </div>
-                    <div class="tooltip action  w3-animate-right" ng-click="downloadDataset(d.datasetName);">
-                        <a ng-href="{{download_path}}" download><img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/></a>
+                    <div class="tooltip action  w3-animate-right" ng-click="downloadDataset(d.datasetName, d.datasetID);">
+                        <a ng-href="{{download_path}}" ng-click="downloadDataset(d.datasetName, d.datasetID);" download><img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/></a>
                         <span class="tooltiptext">Download this dataset</span>
                     </div>
-                    <div class="tooltip action  w3-animate-left" ng-click="deleteDataset(d.datasetName);">
+                    <div class="tooltip action  w3-animate-left" ng-click="deleteDataset(d.datasetName, d.datasetID);">
                         <img src="../css/media/icons/d_f_w_24.png" alt="delete dataset"/>
                         <span class="tooltiptext">Delete this dataset from your collection</span>
                     </div>

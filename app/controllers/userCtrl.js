@@ -15,7 +15,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
 
     $scope.showSampleData = function(val){
         if (val == true){
-            DataService.getDataSamples($scope.activeDataset.datasetName).then(
+            DataService.getDataSamples($scope.activeDataset.datasetID).then(
                 function success(res){
                     if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
                         $scope.activeDataset.dataSamples = JSON.parse(res.data).result;
@@ -60,11 +60,11 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     };
 
     $scope.getDatasets = function(){
-        /*DataService.getUserDatasets($scope.userEmail).then(
+        DataService.getUserDatasets($scope.userEmail).then(
             function success(res) {
-                if (res.status == 200){
-                    if (res.data !== undefined && res.data !== null && res.data.my_data !== undefined){
-                        $scope.datasets = res.data.my_data;
+                if (res.status == 200 && res.data !== undefined && res.data !== null){
+                    if (res.data.result != "failed" && res.data.result.my_data !== undefined){
+                        $scope.datasets = res.data.result.my_data;
                     } else {
                         $scope.datasets = [];
                     }
@@ -88,41 +88,14 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
                 return;
             }
         );
-        */
-        $scope.datasets = [
-            {
-                datasetID: 1,
-                datasetName: "Iris",
-                attributes: ["Petal length", "Petal width", "Sepal length", "Sepal width"],
-                recordCount: 170,
-                uploadDate: '12/04/2017',
-                trendProfileHistory: [
-                    { trendProfileID: 1, nr_clusters: 3, algorithmName: "KMeans", dateGenerated: "12/09/2017" },
-                    { trendProfileID: 2, nr_clusters: 4, algorithmName: "LVQ", dateGenerated: "12/09/2017" },
-                    { trendProfileID: 3, nr_clusters: 3, algorithmName: "KMeans", dateGenerated: "3/10/2017" }
-                ]
-            },
-            {
-                datasetID: 2,
-                datasetName: "Students",
-                attributes: ["Name", "Degree", "Average Study Time", "Likelihood To Pass", "Age"],
-                recordCount: 2000,
-                uploadDate: '9/10/2017',
-                trendProfileHistory: [
-                    { trendProfileID: 1, nr_clusters: 4, algorithmName: "KMeans", dateGenerated: "02/09/2017" },
-                    { trendProfileID: 2, nr_clusters: 4, algorithmName: "LVQ", dateGenerated: "09/09/2017" },
-                    { trendProfileID: 3, nr_clusters: 4, algorithmName: "KMeans", dateGenerated: "03/10/2017" }
-                ]
-            }
-        ];
     };
 
-    $scope.changeAccessMod = function(datasetName, access_mod){
-        if (datasetName == "" || datasetName == null || access_mod == null) return;
+    $scope.changeAccessMod = function(datasetID, access_mod){
+        if (datasetID == "" || datasetID == null || access_mod == null) return;
         if (access_mod == "private") access_mod = "public";
         else if (access_mod == "public") access_mod = "private";
         else return;
-        DataService.changeDatasetAccessMod(datasetName, access_mod).then(
+        DataService.changeDatasetAccessMod(datasetID, access_mod).then(
             function success(res){
                 if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
                     // alert the user that the change succeeded
@@ -149,12 +122,12 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         );
     };
 
-    $scope.downloadDataset = function(datasetName){
-        if (datasetName == "" || datasetName == null) return;
-        DataService.downloadDataset(datasetName, $scope.userEmail).then(
+    $scope.downloadDataset = function(datasetName, datasetID){
+        if (datasetName == "" || datasetName == null || datasetID == "" || datasetID == null) return;
+        DataService.downloadDataset(datasetID, $scope.userEmail).then(
             function success(res){
-                if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
-                    $scope.download_path = JSON.parse(res.data).result;
+                if (res.status == 200 && res.data != undefined && res.data != null && res.data.result != "failed"){
+                    $scope.download_path = res.data.result;
                 } else {
                     var msg = "Ooops! Well this is embarrassing. ";
                     msg += "Something went wrong trying to download " + datasetName;
@@ -176,9 +149,9 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         );
     };
 
-    $scope.isSafeToRemove = function(datasetName){
+    $scope.isSafeToRemove = function(datasetName, dataSetID){
         if (datasetName == "" || datasetName == null) return false;
-        DataService.hasLinkedTrendProfiles(datasetName).then(
+        DataService.hasLinkedTrendProfiles(dataSetID).then(
             function success(res){
                 if (res.status == 200 && res.data != undefined && JSON.parse(res.data).isLinked == "true"){
                     return false; // it is unsafe because it has links
@@ -198,8 +171,8 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         );
     };
 
-    $scope.removeDataset = function (datasetName){
-        DataService.removeDataset(datasetName).then(
+    $scope.removeDataset = function (datasetName, dataSetID){
+        DataService.removeDataset(dataSetID).then(
             function success(res){
                 if (res.status == 200 && res.data == "success"){
                     $scope.getDatasets();
@@ -227,9 +200,9 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         );
     };
 
-    $scope.deleteDataset = function(datasetName){
+    $scope.deleteDataset = function(datasetName, datasetID){
         if (datasetName == "" || datasetName == null) return;
-        if (!$scope.isSafeToRemove(datasetName)){
+        if ($scope.isSafeToRemove(datasetName, datasetID) == false){
             var msg = "Ooops! Well this is embarrassing. ";
             msg += "Something went wrong trying to delete ";
             msg += "the following dataset: " + datasetName;
@@ -238,7 +211,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
             $location.url('/error?errCode=' + code + '&errText=' + msg);
             return;
         }
-        $scope.removeDataset(datasetName);
+        $scope.removeDataset(datasetName, datasetID);
         return;
     };
 
@@ -279,18 +252,6 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         );
     };
 
-    $scope.getData = function(dataSetID){
-        DataService.getDataSamples(dataSetID).then(
-            function success(res){
-                console.log('Successfully retrieved data for ' + dataSetID);
-                console.log(res.data);
-            },
-            function err(res){
-                console.log('Failed to retrieve data for ' + dataSetID);
-            }
-        );
-    };
-
     /* Main */
     var unbind = $rootScope.$on('activeUser', function(event, data){
         $scope.userEmail = data;
@@ -299,7 +260,7 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
 
     $scope.$on('$destroy', unbind);
 
-    if ($location.path() == "/dashboard" && $scope.userEmail == ""){
+    if ($scope.userEmail == ""){
         $scope.userEmail = sessionStorage.getItem("userEmail");
         $scope.getUserName($scope.userEmail);
     }

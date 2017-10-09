@@ -4,9 +4,9 @@ import sys
 import json
 
 
-def handleRequest(dataset_name, access):
+def handleRequest(dataset_id, access):
     db = GraphDatabase("http://localhost:7474", username="neo4j", password="12345678")
-    user_query = 'MATCH (d:DataSet { Data_Set_Name: \'' + dataset_name + '\'})RETURN d'
+    user_query = 'MATCH (d:DataSet { Data_Set_ID: \'' + dataset_id + '\'})RETURN d'
     user_query_results = db.query(user_query, returns=client.Node)
     return_string = ""
     if len(user_query_results) > 0:
@@ -15,7 +15,7 @@ def handleRequest(dataset_name, access):
         if access == d_access:
             return_string = "{\"result\": \"success\"}"
         else:
-            q = 'MATCH (d:DataSet { Data_Set_Name: \'' + dataset_name + '\'}) SET d.Access_Modifier = \'' + d_access + '\''
+            q = 'MATCH (d:DataSet { Data_Set_ID: \'' + dataset_id + '\'}) SET d.Access_Modifier = \'' + access + '\''
             db.query(q)
             return_string = "{\"result\": \"success\"}"
     else:
@@ -24,12 +24,12 @@ def handleRequest(dataset_name, access):
 
 
 def main():
-    dataset_name = ""
+    dataset_id = ""
     if len(sys.argv) == 2:
         args = json.loads(sys.argv[1])
-        dataset_name = args['dataset']
+        dataset_id = args['dataset_id']
         access = args['access']
-        handleRequest(dataset_name=dataset_name, access=access)
+        handleRequest(dataset_id=dataset_id, access=access)
     else:
         print('Invalid number of arguments.')
         exit()

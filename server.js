@@ -40,12 +40,12 @@ app.post('/registerNewUser', function (req, res) {
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
 
-	PythonShell.run('User_Register.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/User_Register.py', options, function (err, results) {
 		if (err)
 		{
 			console.log("User registration failed: " + err);
@@ -69,17 +69,25 @@ app.post('/retrieveDatasets', function(req, res){
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
-	PythonShell.run('getAllData.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/getAllData.py', options, function (err, results) {
 		if (err){
 			console.log("Error failed to get datasets: " + err);
-
+			res.writeHead(400, {
+				'Content-Type': 'application/json'
+			});
+			res.write(JSON.stringify({ result: "failed" }));
+            res.end();
+			return;
 		} else {
 			console.log("Datasets successfully fetched: " + results);
-			res.write(results);
+			res.writeHead(200, {
+				'Content-Type': 'application/json'
+			});
+			res.write('{ \"result\": ' + results + ' }');
             res.end();
 		}
 	});
@@ -97,11 +105,11 @@ app.post('/executeLogin', function (req, res) {
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
-	PythonShell.run('User_Auth.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/User_Auth.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to login: " + err);
 			res.write("failed");
@@ -130,12 +138,12 @@ app.post('/getUserFullName', function (req,res){
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
 
-	PythonShell.run('User_Full_Name.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/User_Full_Name.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to get a user's full name: " + err);
 			res.write("failed");
@@ -155,19 +163,20 @@ app.post('/getUserFullName', function (req,res){
 
 //Check this query against the notes received
 app.post('/changeDatasetAccessMod', function (req, res) {
-	console.log("Change dataset access modifier request received. Dataset: " + req.body.datasetName);
+	console.log(req.body);
+	console.log("Change dataset access modifier request received. Dataset: " + req.body.dataSetID);
 
-	var sendPyReq = '{\"dataset\": \"' + req.body.datasetName + '\", \"access\": \"' + req.body.access + '\"}';
+	var sendPyReq = '{\"dataset_id\": \"' + req.body.dataSetID + '\", \"access\": \"' + req.body.access + '\"}';
 
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
 
-PythonShell.run('change_dataset_access.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/change_dataset_access.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to get dataset access modifier: " + err);
 			res.write("failed");
@@ -184,19 +193,19 @@ PythonShell.run('change_dataset_access.py', options, function (err, results) {
 
 
 app.post('/removeDataset', function (req, res) {
-	console.log("Remove dataset request received. Dataset: " + req.body.datasetName);
+	console.log("Remove dataset request received. Dataset: " + req.body.dataSetID);
 
-	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
+	var sendPyReq = '{\"dataset_id\":\"' + req.body.dataSetID + '\"}';
 
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
 
-	PythonShell.run('remove_dataset.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/remove_dataset.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to remove dataset: " + err);
 			res.write("failed");
@@ -218,12 +227,12 @@ app.post('/retrieveDataSamples', function (req, res) {
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [JSON.stringify(req.body)]
 	};
 
 
-	PythonShell.run('data_samples.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/data_samples.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to retrieve data samples: " + err);
 			console.log(results);
@@ -248,19 +257,19 @@ app.post('/retrieveDataSamples', function (req, res) {
 
 
 app.post('/hasLinkedTrendProfiles', function (req, res) {
-	console.log("Check if connected to trend profile. Dataset: " + req.body.datasetName);
+	console.log("Check if connected to trend profile. Dataset: " + req.body.dataSetID);
 
-	var sendPyReq = '{\"dataset\":\"' + req.body.datasetName + '\"}';
+	var sendPyReq = '{\"dataset_id\":\"' + req.body.dataSetID + '\"}';
 
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [sendPyReq]
 	};
 
 	// Check if this is the dataset name or dataset ID
-	PythonShell.run('check_linked_tp.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/check_linked_tp.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to check linked TPs: " + err);
 			res.write("failed");
@@ -280,11 +289,11 @@ app.post('/retrieveStats', function(req, res){
 	var options = {
 		mode: 'text',
 		pythonPath: 'python3',
-		scriptPath: '/scripts/repository/',
+		scriptPath: '',
 		args: [JSON.stringify(req.body)]
 	};
 
-	PythonShell.run('retrieve_stats.py', options, function (err, results) {
+	PythonShell.run('/scripts/repository/retrieve_stats.py', options, function (err, results) {
 		if (err)
 		{
 			console.log("Cannot retrieve stats: " + err);
@@ -308,12 +317,12 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 		req.session.schemaPath = uploadDir+'/'+file.name;
 		console.log(req.session);
 		console.log(req.session.schemaPath);
-	} 
+	}
 	else if (req.body.kind == 'dataset'){
 		uploadDir = 'uploads/datasets/' + hash;
 		req.session.dataPath = uploadDir+'/'+file.name;
 		console.log(req.session);
-		
+
 		console.log(req.session.dataPath);
 
 	}
@@ -340,7 +349,7 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 	} else {
 		console.log("Directory exists: " + uploadDir);
 		res.setHeader("Content-Type", "application/json");
-		
+
 		if (addFileToFolder(uploadDir, file)) {
 			res.write('{ "result": "success" }');
 		} else {
@@ -368,12 +377,12 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 			{
 				console.log("Cannot process and clean data for " + userEmail);
 				res.write('{ "result": "failed" }');
-				res.end();	
+				res.end();
 			}
 			else
 			{
 				console.log("Data successfully processed and persisted to the data repository.");
-				res.write('{ "result": "success" }');	
+				res.write('{ "result": "success" }');
 		  		res.end();
 			}
 		});
@@ -382,7 +391,7 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 
 function addFileToFolder(folder, file){
 	fs.renameSync(file.path, (folder + '/' + file.name));
-	
+
 	var fd = fs.openSync((folder + '/' + file.name), 'r+');
 	fs.closeSync(fd);
 	console.log(fd);
@@ -398,7 +407,9 @@ function addFileToFolder(folder, file){
 // download the specified dataset as a cvs
 app.post("/downloadDataset", function(req, res){
 	console.log("download the specified dataset as a cvs");
-	if(req.body == undefined || req.body.datasetName == undefined || req.body.userEmail){
+	console.log(req.body);
+	if(req.body == undefined || req.body.dataset_id == undefined || req.body.userEmail == undefined){
+		console.log("Give me what I need and I'll you'll have your file.");
 		res.writeHead(400, {
 			'Content-Type': 'application/json'
 		});
@@ -409,12 +420,13 @@ app.post("/downloadDataset", function(req, res){
 		var options = {
 			mode: 'text',
 			pythonPath: 'python3',
-			scriptPath: '/scripts/repository/',
-			args: [JSON.stringify({ datasetName: req.body.datasetName, hasedUserEmail: hasedUserEmail })]
+			scriptPath: '',
+			args: [JSON.stringify({ dataset_id: req.body.dataset_id, hasedUserEmail: hasedUserEmail })]
 		};
 
-		PythonShell.run('download_dataset.py', options, function(err, results){
+		PythonShell.run('/scripts/repository/download_dataset.py', options, function(err, result){
 			if(err){
+				console.log("You're not getting this file!");
 				res.writeHead(400, {
 					'Content-Type': 'application/json'
 				});
@@ -425,7 +437,11 @@ app.post("/downloadDataset", function(req, res){
 			res.writeHead(200, {
 				'Content-Type': 'application/json'
 			});
-			res.write('{ "result": \"' + result + ' \"}');
+			if (JSON.parse(result[0]).result == "failed"){
+				res.write('{ "result": "failed" }');
+			} else {
+				res.write('{ "result": \"' + JSON.parse(result[0]).result + ' \"}');
+			}
 			res.end();
 		});
 	}

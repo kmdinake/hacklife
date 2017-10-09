@@ -4,10 +4,10 @@ import sys
 import json
 
 
-def handleRequest(dataset):
+def handleRequest(dataset_id):
     db = GraphDatabase("http://localhost:7474", username="neo4j", password="12345678")
 
-    tp_query = 'MATCH (p:Trend_Profile)-[h:Has]->(d:DataSet { Data_Set_Name: \'' + dataset + '\'})RETURN p'
+    tp_query = 'MATCH (p:Trend_Profile)-[h:Has]->(d:DataSet { Data_Set_ID: \'' + dataset_id + '\'})RETURN p'
     tp_query_results = db.query(tp_query, returns=client.Node)
     return_string = ""
 
@@ -22,11 +22,11 @@ def handleRequest(dataset):
 
 
 def main():
-    dataset = ""
+    dataset_id = ""
     if len(sys.argv) == 2:
         args = json.loads(sys.argv[1])
-        dataset = args['dataset']
-        handleRequest(dataset=dataset)
+        dataset_id = args['dataset_id']
+        handleRequest(dataset_id=dataset_id)
     else:
         print('Invalid number of arguments.')
         exit()

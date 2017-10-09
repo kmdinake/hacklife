@@ -151,15 +151,14 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         DataService.getDataSamples(datasetName).then(
             function success(res){
                 if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
-                    // Deal with the file to download
-                    console.log("now download the file!");
+                    // do Something with data 
                 } else {
-                    console.log(res.data);
                     var msg = "Ooops! Well this is embarrassing. ";
                     msg += "Something went wrong trying to download " + datasetName;
                     msg += ". Please try again later.";
                     var code = 400;
-                    $location.url('/error?errCode=' + code + '&errText=' + msg);
+                    console.log(res.data + " <> " + code + " <> " + msg);
+                    //$location.url('/error?errCode=' + code + '&errText=' + msg);
                     return;
                 }
             },

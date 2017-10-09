@@ -218,8 +218,12 @@ PythonShell.run('/scripts/repository/data_samples.py', options, function (err, r
 			res.end();
 		} else {
 			console.log("Dataset samples retrieved. Output: " + results);
-			//res.setHeader('Content-Type', 'application/json');
-			res.write(results[0]);
+			if (results.length == 1){
+				res.setHeader('Content-Type', 'application/json');
+				res.write(JSON.stringify(results));
+			} else {
+				res.write(results[0]);
+			}
 			res.end();
 		}
 	});

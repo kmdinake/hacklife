@@ -4,7 +4,7 @@
 * Date: 6 October 2017
 */
 
-var app = angular.module('TrendiApp', ['ngRoute']);
+var app = angular.module('TrendiApp', ['ngRoute', 'ngFileUpload']);
 
 app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider){
     /*$locationProvider

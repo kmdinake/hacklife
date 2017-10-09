@@ -3,7 +3,7 @@
     <button class="w3-card-4 w3-right upload-btn" data-toggle="modal" data-target="#uploadModal">
         Upload Dataset
     </button>
-    <div id="uploadModal" class="modal fade uploader" role="dialog">
+    <div id="uploadModal" class="modal fade uploader" role="dialog" ng-controller="UploadController">
             <div class="modal-dialog uploader">
 
                 <!-- Modal content-->
@@ -32,7 +32,7 @@
 
                                 <!-- Test -->
 
-                                <button ngf-select="uploadFiles($files, $invalidFiles)"
+                                <button ngf-select="uploadFiles($files, $invalidFiles)" ng-click="uploadFiles($files, $invalidFiles)"
                                            ngf-max-height="1000" ngf-max-size="1000MB">
                                       Select Files</button>
 

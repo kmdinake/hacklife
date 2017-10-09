@@ -84,13 +84,13 @@
                     <img src="../css/media/icons/b_w_96.png" alt="view dataset"/>
                 </div>
                 <div class="actions">
-                    <div class="tooltip action  w3-animate-left" ng-click="changeAccessMod(d.datasetName, !d.isPublic);">
+                    <div class="tooltip action  w3-animate-left" ng-click="changeAccessMod(d.datasetName, d.access_mod);">
                         <img src="../css/media/icons/c_u_w_24.png" alt="change access modifier"/>
-                        <span ng-if="!d.isPublic" class="tooltiptext">Make this dataset public</span>
-                        <span ng-if="d.isPublic" class="tooltiptext">Make this dataset private</span>
+                        <span ng-if="d.access_mod == 'private'" class="tooltiptext">Make this dataset public</span>
+                        <span ng-if="d.access_mod == 'public'" class="tooltiptext">Make this dataset private</span>
                     </div>
                     <div class="tooltip action  w3-animate-right" ng-click="downloadDataset(d.datasetName);">
-                        <img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/>
+                        <a ng-href="{{download_path}}" download><img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/></a>
                         <span class="tooltiptext">Download this dataset</span>
                     </div>
                     <div class="tooltip action  w3-animate-left" ng-click="deleteDataset(d.datasetName);">

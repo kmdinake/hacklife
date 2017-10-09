@@ -5,8 +5,8 @@ app.factory('DataService', ['$http', function DataService($http){
         return $http.post('/retrieveDatasets', { userEmail: userEmail });   // queries Neo4j
     };
 
-    factoryObj.changeDatasetAccessMod = function (dName, truth_val){
-        return $http.post('/changeDatasetAccessMod', { datasetName: dName, isPublic: truth_val });   // queries Neo4j
+    factoryObj.changeDatasetAccessMod = function (dName, modifier){
+        return $http.post('/changeDatasetAccessMod', { datasetName: dName, access: modifier });   // queries Neo4j
     };
 
     factoryObj.removeDataset = function (dName){
@@ -23,6 +23,10 @@ app.factory('DataService', ['$http', function DataService($http){
 
     factoryObj.getStats = function(dataSetID){
         return $http.post("/retrieveStats", { dataSetID: dataSetID });
+    };
+
+    factoryObj.downloadDataset = function(dName, userEmail){
+        return $http.post("/downloadDataset", { datasetName: dName, userEmail: userEmail });
     };
 
     return factoryObj;

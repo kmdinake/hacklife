@@ -11,6 +11,7 @@
                 recordCount: -1,
                 uploadDate: "", dd/mm/yyyy,
                 access_mod: "",
+                download_path: "",
                 trendProfileHistory: [] -> { trendProfileID: -1, nr_clusters: -1, algorithmName: "", dateGenerated: "" }
             }
         ]
@@ -60,12 +61,10 @@ while count < len(db_list):
         else:
             return_string += "\"],"
 
-    # return_string += "\"recordCount: \"" + db_nodes[count]["Record_Count"] + "\","
-    return_string += "\"recordCount\": \"-1\","
-    # @ TODO: change this to return the correct date attribute
-    # return_string += "\"uploadDate: \"" + db_nodes[count]["Upload_Date"] + "\","
-    return_string += "\"uploadDate\":" + "\"15/10/2017" + "\","
+    return_string += "\"recordCount\": \"" + str(db_nodes[count]["Record_Count"]) + "\","
+    return_string += "\"uploadDate\": \"" + db_nodes[count]["Upload_Date"] + "\","
     return_string += "\"access_mod\":\"" + db_nodes[count]["Access_Modifier"] + "\","
+    return_string += "\"download_path\":\"" + db_nodes[count]["Download_Path"] + "\","
     query = 'MATCH (u:User { Email: \'' + email + '\'})-[z:Has]->(p:Trend_Profile)-[y:Has]->(d:DataSet ' \
             '{ Data_Set_ID: \'' + db_list[count][0] + '\'}) RETURN p'
     results = db.query(query, returns=client.Node)

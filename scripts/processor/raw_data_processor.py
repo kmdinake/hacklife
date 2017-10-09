@@ -28,7 +28,7 @@ class RawDataProcessor:
         self.load()
         self.process()
         self.store()
-        to_return = '{\"result\": {\"dataset_name\": ' + self.__file_name + ', \"dataset_id\": ' + self.__unique_data_set_identifier + '}}'
+        to_return = '{ \"result\": { \"dataset_name\": \"' + self.__file_name + '\", \"dataset_id\": \"' + self.__unique_data_set_identifier + '\"}}'
         print(to_return)
 
     def load(self):

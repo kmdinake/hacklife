@@ -28,4 +28,3 @@ else:
     exit()
 
 rdp.engage()
-rdp.print_data()

@@ -22,7 +22,8 @@ class AbstractStore(metaclass=abc.ABCMeta):
         data_sets_label = db.labels.create("DataSet")
         attributes_label = db.labels.create("Attribute")
         new_data_set = db.nodes.create(Data_Set_Name=data_set_name, Owner=owner, Access_Modifier=access_modifier,
-                                       Database=database, Upload_Date=date_uploaded, Record_Count=record_count)
+                                       Database=database, Upload_Date=date_uploaded, Record_Count=record_count,
+                                       Download_Path='')
         new_data_set.set('Data_Set_ID', data_set_name + '_' + str(new_data_set.id))
         data_sets_label.add(new_data_set)
 

@@ -22,11 +22,14 @@ class RawDataProcessor:
         self.__file_name = None
         self.__data_set_stats = None
         self.__record_count = None
+        self.__unique_data_set_identifier = None
 
     def engage(self):
         self.load()
         self.process()
         self.store()
+        to_return = '{\"result\": {\"dataset_name\": ' + self.__file_name + ', \"dataset_id\": ' + self.__unique_data_set_identifier + '}}'
+        print(to_return)
 
     def load(self):
         # Extract the file extension from the path and instantiate the appropriate loading strategy.
@@ -99,11 +102,11 @@ class RawDataProcessor:
         # Check that the current user doesn't already have a data set with the same name
         self.__storing_strategy.check_for_same_named_data_set(self.__file_name, self.__user_id)
 
-        unique_data_set_identifier = self.__storing_strategy.add_data_set_to_graph(self.__file_name, 'Me', 'Mongo',
+        self.__unique_data_set_identifier = self.__storing_strategy.add_data_set_to_graph(self.__file_name, 'Me', 'Mongo',
                                                                                    self.__access_modifier,
                                                                                    self.__schema, self.__user_id,
                                                                                    self.__record_count)
-        self.__storing_strategy.store_data(self.__data_set, self.__data_set_stats, 'Data', unique_data_set_identifier)
+        self.__storing_strategy.store_data(self.__data_set, self.__data_set_stats, 'Data', self.__unique_data_set_identifier)
 
     def store_to_db(self):
         # For testing purposes

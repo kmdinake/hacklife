@@ -337,7 +337,7 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 				console.log("Directory for " + userEmail + " successfully made");
 				res.setHeader("Content-Type", "application/json");
 				if (addFileToFolder(uploadDir, file)) {
-					res.write('{ "result": "success" }');
+					//res.write('{ "result": "success" }'); not required
 				} else {
 					res.write('{ "result": "failed" }');
 				}
@@ -351,7 +351,7 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 		res.setHeader("Content-Type", "application/json");
 
 		if (addFileToFolder(uploadDir, file)) {
-			res.write('{ "result": "success" }');
+			//res.write('{ "result": "success" }'); not required
 		} else {
 			res.write('{ "result": "failed" }');
 		}
@@ -382,7 +382,7 @@ app.post('/upload', multipartyMiddleware, function (req, res){
 			else
 			{
 				console.log("Data successfully processed and persisted to the data repository.");
-				res.write('{ "result": "success" }');
+				res.write('{ "result": ' + JSON.stringify(JSON.parse(results[0]).result) + ' }');
 		  		res.end();
 			}
 		});

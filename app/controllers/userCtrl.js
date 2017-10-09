@@ -271,17 +271,18 @@ app.controller('UserController', [
             });
 
             $scope.fileToUp.upload.then(
-            function (evt) {
-                $scope.fileToUp.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-                console.log($scope.fileToUp.progress);
-            },
             function (res) {
                 $scope.fileToUp.result = res.data;
-                $scope.downloadDataset(res.data.dataset_name, res.data.dataset_id);
+                console.log(JSON.parse(res.data).result);
+                $scope.downloadDataset(res.data.result.dataset_name, res.data.result.dataset_id);
             },
             function (res) {
                 if (res.status > 0)
                     $scope.errorMsg = res.status + ': ' + res.data;
+            },
+            function (evt) {
+                $scope.fileToUp.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                console.log($scope.fileToUp.progress);
             });
         }
     };

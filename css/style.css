@@ -328,7 +328,7 @@ ul.nav.navbar-nav a:hover {
     border-radius: 0;
     width: 40vw;
     margin: auto;
-    margin-top: 10vh;
+    margin-top: 3vh;
 }
 
 .uploader .modal-title{
@@ -343,6 +343,7 @@ ul.nav.navbar-nav a:hover {
     width: 15vw;
     float: right;
     margin: -8vh 0 0 0;
+    z-index: -2;
 }
 
 .uploader .uploadInput{

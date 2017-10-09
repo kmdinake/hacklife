@@ -117,9 +117,12 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         ];
     };
 
-    $scope.changeAccessMod = function(datasetName, truth_val){
-        if (datasetName == "" || datasetName == null || truth_val == null) return;
-        DataService.changeDatasetAccessMod(datasetName, truth_val).then(
+    $scope.changeAccessMod = function(datasetName, access_mod){
+        if (datasetName == "" || datasetName == null || access_mod == null) return;
+        if (access_mod == "private") access_mod = "public";
+        else if (access_mod == "public") access_mod = "private";
+        else return;
+        DataService.changeDatasetAccessMod(datasetName, access_mod).then(
             function success(res){
                 if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
                     // alert the user that the change succeeded
@@ -148,17 +151,16 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
 
     $scope.downloadDataset = function(datasetName){
         if (datasetName == "" || datasetName == null) return;
-        DataService.getDataSamples(datasetName).then(
+        DataService.downloadDataset(datasetName, $scope.userEmail).then(
             function success(res){
                 if (res.status == 200 && res.data != undefined && res.data != null && JSON.parse(res.data).result != "failed"){
-                    // do Something with data 
+                    $scope.download_path = JSON.parse(res.data).result;
                 } else {
                     var msg = "Ooops! Well this is embarrassing. ";
                     msg += "Something went wrong trying to download " + datasetName;
                     msg += ". Please try again later.";
                     var code = 400;
                     console.log(res.data + " <> " + code + " <> " + msg);
-                    //$location.url('/error?errCode=' + code + '&errText=' + msg);
                     return;
                 }
             },

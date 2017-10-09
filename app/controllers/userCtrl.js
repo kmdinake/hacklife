@@ -1,4 +1,6 @@
-app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserService', 'DataService', function UserController($scope, $rootScope, $location, UserService, DataService){
+app.controller('UserController', [
+    '$scope', '$rootScope', '$location', 'UserService', 'DataService', 'Upload',
+    function UserController($scope, $rootScope, $location, UserService, DataService, Upload){
     /* User Attributes */
     $scope.userEmail = "";
     $scope.userFullname = "";
@@ -6,6 +8,8 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
     $scope.activeDataset = null;
     $scope.showTrendProfileHistory = false;
     $scope.showingSampleData = false;
+    $scope.url = 'uploads';
+    $scope.fileToUp = "";
 
     /* Helper Methods */
 
@@ -127,7 +131,8 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
         DataService.downloadDataset(datasetID, $scope.userEmail).then(
             function success(res){
                 if (res.status == 200 && res.data != undefined && res.data != null && res.data.result != "failed"){
-                    $scope.download_path = res.data.result;
+                    //$scope.download_path = res.data.result;
+                    $scope.getDatasets();
                 } else {
                     var msg = "Ooops! Well this is embarrassing. ";
                     msg += "Something went wrong trying to download " + datasetName;
@@ -251,6 +256,36 @@ app.controller('UserController', ['$scope', '$rootScope', '$location', 'UserServ
             }
         );
     };
+
+    $scope.uploadFiles = function(kind) {
+        $scope.fileToUp.progress = 0;
+
+        if($scope.fileToUp != null){
+            $scope.fileToUp.upload = Upload.upload({
+                url: '/upload',
+                data: {
+                    file: $scope.fileToUp,
+                    userEmail: sessionStorage.getItem("userEmail"),
+                    kind: kind
+                }
+            });
+
+            $scope.fileToUp.upload.then(
+            function (evt) {
+                $scope.fileToUp.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                console.log($scope.fileToUp.progress);
+            },
+            function (res) {
+                $scope.fileToUp.result = res.data;
+                $scope.downloadDataset(res.data.dataset_name, res.data.dataset_id);
+            },
+            function (res) {
+                if (res.status > 0)
+                    $scope.errorMsg = res.status + ': ' + res.data;
+            });
+        }
+    };
+
 
     /* Main */
     var unbind = $rootScope.$on('activeUser', function(event, data){

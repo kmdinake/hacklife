@@ -3,9 +3,23 @@ import os
 import json
 import pandas as pd
 import pymongo as pm
+from neo4jrestclient import client
+from neo4jrestclient.client import GraphDatabase
 
 
-def handleRequest(dataset_id, user_folder):
+def handleNeoRequest(download_path, dataset_id):
+    db = GraphDatabase("http://localhost:7474", username="neo4j", password="12345678")
+    cq = 'MATCH (d: DataSet { Data_Set_ID: \'' + dataset_id + '\'}) SET d.Download_Path = \'' + download_path + '\''
+    db.query(cq, returns=client.Node)
+    cq = 'MATCH (d: DataSet { Data_Set_ID: \'' + dataset_id + '\', Download_Path: \'' + download_path + '\'}) RETURN d'
+    res = db.query(cq, returns=client.Node)
+    if len(res) > 0:
+        print('{ \"result\": \"success\" }')
+    else:
+        print('{ \"result\": \"failed\" }')
+
+
+def handleMongoRequest(dataset_id, user_folder):
     client = pm.MongoClient()
     db_name = "Data"
     coll_name = dataset_id
@@ -27,7 +41,8 @@ def handleRequest(dataset_id, user_folder):
     user_dir = user_dir + "/" + dataset_id + ".csv"
     try:
         df.to_csv(user_dir)
-        print('{ \"result\": \"' + user_dir + '\" }')
+        # print('{ \"result\": \"' + user_dir + '\" }')
+        handleNeoRequest(user_dir, dataset_id)
     except EnvironmentError:
         print('{ \"result\": \"failed\" }')
     except BaseException:
@@ -37,7 +52,7 @@ def handleRequest(dataset_id, user_folder):
 def main():
     if len(sys.argv) == 2:
         json_obj = json.loads(sys.argv[1])
-        handleRequest(json_obj['dataset_id'], json_obj['hasedUserEmail'])
+        handleMongoRequest(json_obj['dataset_id'], json_obj['hasedUserEmail'])
     else:
         print('{ \"result\": \"failed\" }')
 

@@ -3,7 +3,7 @@
     <button class="w3-card-4 w3-right upload-btn" data-toggle="modal" data-target="#uploadModal">
         Upload Dataset
     </button>
-    <div id="uploadModal" class="modal fade uploader" role="dialog" ng-controller="UploadController">
+    <div id="uploadModal" class="modal fade uploader" role="dialog">
             <div class="modal-dialog uploader">
 
                 <!-- Modal content-->
@@ -89,8 +89,8 @@
                         <span ng-if="d.access_mod == 'private'" class="tooltiptext">Make this dataset public</span>
                         <span ng-if="d.access_mod == 'public'" class="tooltiptext">Make this dataset private</span>
                     </div>
-                    <div class="tooltip action  w3-animate-right" ng-click="downloadDataset(d.datasetName, d.datasetID);">
-                        <a ng-href="{{download_path}}" ng-click="downloadDataset(d.datasetName, d.datasetID);" download><img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/></a>
+                    <div class="tooltip action  w3-animate-right">
+                        <a ng-href="{{d.download_path}}" download><img src="../css/media/icons/g_a_w_24.png" alt="download dataset"/></a>
                         <span class="tooltiptext">Download this dataset</span>
                     </div>
                     <div class="tooltip action  w3-animate-left" ng-click="deleteDataset(d.datasetName, d.datasetID);">

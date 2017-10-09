@@ -3,16 +3,16 @@ app.controller('UploadController', ['$scope', 'Upload', function ($scope, Upload
     $scope.fileToUp = "";
     $scope.uploadFiles = function(kind) {
         $scope.fileToUp.progress = 0;
-        
-        if($scope.fileToUp != null){   
+
+        if($scope.fileToUp != null){
             $scope.fileToUp.upload = Upload.upload({
                 url: '/upload',
-                data: { 
+                data: {
                     file: $scope.fileToUp,
-                    userEmail: sessionStorage.getItem("userEmail"), 
+                    userEmail: sessionStorage.getItem("userEmail"),
                     kind: kind
                 }
-            });   
+            });
 
             $scope.fileToUp.upload.then(
             function (evt) {
@@ -20,12 +20,12 @@ app.controller('UploadController', ['$scope', 'Upload', function ($scope, Upload
                 console.log($scope.fileToUp.progress);
             },
             function (res) {
-                $scope.fileToUp.result = res.data;  
-            }, 
+                $scope.fileToUp.result = res.data;
+            },
             function (res) {
                 if (res.status > 0)
                     $scope.errorMsg = res.status + ': ' + res.data;
-            });    
+            });
         }
     }
 }]);

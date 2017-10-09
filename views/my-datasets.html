@@ -12,7 +12,7 @@
                         <div class="close-upload" style="float:right" data-dismiss="modal">
                             <img src="../css/media/icons/c_b_48.png"/>
                         </div>
-                        <h4 class="modal-title">Upload a dataset</h4>
+                        <h4 class="modal-title">Upload Your Data</h4>
                     </div>
 
                     <div class="modal-body">
@@ -20,24 +20,21 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <span class="glyphicon glyphicon-cloud-upload"></span>
-                                <h3>File Uploader</h3>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar"></div>
-                                </div>
+                                <h3>Schema upload</h3>
                                 <div>
+                                    <form> 
+                                        <input ngf-select ngf-max-height="1000" value="Select Schema File" type="file" ng-model="fileToUp" kind=".csv">
+                                        <button ng-click="uploadFiles('schema')">Upload Schema</button>
+                                    </form>
                                     <span>
-                                        <p>Please select a data file and a schema file. The data file should have the extension .csv, </p>
+                                        <p>The file should be a csv file containing a comma separated list of the column names in the dataset.</p>
                                     </span>
                                 </div>
 
                                 <!-- Test -->
 
-                                <button ngf-select="uploadFiles($files, $invalidFiles)" ng-click="uploadFiles($files, $invalidFiles)"
-                                           ngf-max-height="1000" ngf-max-size="1000MB">
-                                      Select Files</button>
-
                                 <ul>
-                                    <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
+                                    <li ng-repeat="f in file" style="font:smaller">{{f.name}} {{f.$errorParam}}
                                       <span class="progress" ng-show="f.progress >= 0">
                                         <div style="width:{{f.progress}}%"
                                             ng-bind="f.progress + '%'"></div>
@@ -54,6 +51,20 @@
                                     <input id="upload-input" type="file" name="uploads[]" multiple="multiple" class="uploadBtn">
                                 </div>
                                 <button class="btn upload-btn" type="button" class="executeUpload">Upload File</button>
+                            </div>
+                            <div class="panel-body">
+                                <span class="glyphicon glyphicon-cloud-upload"></span>
+                                <h3>Dataset upload</h3>
+                                <div>
+                                    <form> 
+                                        <input ngf-select ngf-max-height="1000" value="Select File" type="file" ng-model="fileToUp" kind=".csv, .json, .xlsx, .xml">
+                                        <button ng-click="uploadFiles('dataset')">Upload Dataset</button>     
+                                    </form>
+                                    <span>
+                                        <p>The file should be a csv, xlsx, xls, json or xml file.</p>
+                                    </span>
+                                </div>
+                                
                             </div>
                         </div>
 

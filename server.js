@@ -1,11 +1,17 @@
 var express = require('express');
 var path = require('path');
 var app = express();
+var fs = require('fs');
 var bodyParser = require('body-parser');
 var PythonShell = require('python-shell');
+var multiparty = require('connect-multiparty');
+var crypto = require('crypto');
+var session = require('express-session')
+var multipartyMiddleware = multiparty();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
 
 app.use("/", express.static(__dirname));
 
@@ -276,3 +282,100 @@ app.post('/retrieveStats', function(req, res){
 		}
 	});
 });
+
+app.post('/upload', multipartyMiddleware, function (req, res){
+	var file = req.files.file;
+	var userEmail = req.body.userEmail;
+	var uploadDir = '';
+	var hash = crypto.createHmac('sha256', userEmail).digest('hex');
+	if (req.body.kind == 'schema'){
+		uploadDir = 'uploads/schemas/' + hash;
+		req.session.schemaPath = uploadDir+'/'+file.name;
+		console.log(req.session);
+		console.log(req.session.schemaPath);
+	} 
+	else if (req.body.kind == 'dataset'){
+		uploadDir = 'uploads/datasets/' + hash;
+		req.session.dataPath = uploadDir+'/'+file.name;
+		console.log(req.session);
+		
+		console.log(req.session.dataPath);
+
+	}
+	if (!fs.existsSync(uploadDir)){
+		fs.mkdir(uploadDir, function(err){
+			if(err){
+				console.log("Failed to create the upload directory for " + userEmail);
+				res.setHeader("Content-Type", "application/json");
+				res.write('{ "result": "failed" }');
+				res.end();
+			} else {
+				console.log("Directory for " + userEmail + " successfully made");
+				res.setHeader("Content-Type", "application/json");
+				if (addFileToFolder(uploadDir, file)) {
+					res.write('{ "result": "success" }');
+				} else {
+					res.write('{ "result": "failed" }');
+				}
+				if(!(req.session.schemaPath && req.session.dataPath)){
+					res.end();
+				}
+			}
+		});
+	} else {
+		console.log("Directory exists: " + uploadDir);
+		res.setHeader("Content-Type", "application/json");
+		
+		if (addFileToFolder(uploadDir, file)) {
+			res.write('{ "result": "success" }');
+		} else {
+			res.write('{ "result": "failed" }');
+		}
+		if(!(req.session.schemaPath && req.session.dataPath)){
+			res.end();
+		}
+
+	}
+
+	if(req.session.schemaPath && req.session.dataPath){
+		console.log("Cleaner called.");
+		args = '{\"user_id\":\"' + userEmail + '\",\"access_modifier\":\"private\",\"data_path\":\"' + req.session.dataPath + '\",\"schema_path\":\"' + req.session.schemaPath + '\"}'
+		console.log(args);
+		var options = {
+			mode: 'text',
+			pythonPath: 'python3',
+			scriptPath: '',
+			args: [args]
+		};
+
+		PythonShell.run('/scripts/processor/process.py', options, function (err, results) {
+			if (err)
+			{
+				console.log("Cannot process and clean data for " + userEmail);
+				res.write('{ "result": "failed" }');
+				res.end();	
+			}
+			else
+			{
+				console.log("Data successfully processed and persisted to the data repository.");
+				res.write('{ "result": "success" }');	
+		  		res.end();
+			}
+		});
+	}
+});
+
+function addFileToFolder(folder, file){
+	fs.renameSync(file.path, (folder + '/' + file.name));
+	
+	var fd = fs.openSync((folder + '/' + file.name), 'r+');
+	fs.closeSync(fd);
+	console.log(fd);
+	if (fd < 0){
+		console.log("Failed to save " + file.name + " to " + folder);
+		return false;
+	} else {
+		console.log("Successfully saved " + file.name + " to " + folder);
+		return true;
+	}
+}

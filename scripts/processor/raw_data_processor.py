@@ -21,6 +21,7 @@ class RawDataProcessor:
         self.__schema = None
         self.__file_name = None
         self.__data_set_stats = None
+        self.__record_count = None
 
     def engage(self):
         self.load()
@@ -50,6 +51,7 @@ class RawDataProcessor:
 
         # Load the data.
         self.__data_set = self.__loading_strategy.load_data(self.__data_path, schema_path=self.__schema_path)
+        self.__record_count = self.__data_set.shape[0]
         return 'Success'
 
     def process(self):
@@ -99,7 +101,8 @@ class RawDataProcessor:
 
         unique_data_set_identifier = self.__storing_strategy.add_data_set_to_graph(self.__file_name, 'Me', 'Mongo',
                                                                                    self.__access_modifier,
-                                                                                   self.__schema, self.__user_id)
+                                                                                   self.__schema, self.__user_id,
+                                                                                   self.__record_count)
         self.__storing_strategy.store_data(self.__data_set, self.__data_set_stats, 'Data', unique_data_set_identifier)
 
     def store_to_db(self):

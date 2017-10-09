@@ -2,6 +2,7 @@ import abc
 import pymongo as pm
 from neo4jrestclient.client import GraphDatabase
 from neo4jrestclient import client
+import datetime
 
 
 class AbstractStore(metaclass=abc.ABCMeta):
@@ -12,14 +13,16 @@ class AbstractStore(metaclass=abc.ABCMeta):
         pass
 
     @staticmethod
-    def add_data_set_to_graph(data_set_name, owner, database, access_modifier, schema, user_id,
+    def add_data_set_to_graph(data_set_name, owner, database, access_modifier, schema, user_id, record_count,
                               url='http://localhost:7474',
                               username='neo4j', password='12345678'):
+        now = datetime.datetime.now()
+        date_uploaded = now.strftime('%d/%m/%y')
         db = GraphDatabase(url, username=username, password=password)
         data_sets_label = db.labels.create("DataSet")
         attributes_label = db.labels.create("Attribute")
         new_data_set = db.nodes.create(Data_Set_Name=data_set_name, Owner=owner, Access_Modifier=access_modifier,
-                                       Database=database)
+                                       Database=database, Upload_Date=date_uploaded, Record_Count=record_count)
         new_data_set.set('Data_Set_ID', data_set_name + '_' + str(new_data_set.id))
         data_sets_label.add(new_data_set)
 

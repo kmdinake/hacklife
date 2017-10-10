@@ -10,6 +10,7 @@
          { "title": "Dashboard", "link":"#/dashboard" },
          { "title": "Datasets", "link": "#/my_datasets" },
          { "title": "Data Tools", "link": "#/data_tools" },
+         { "title": "Statistics", "link": "#/statistics" },
          { "title": "Explore", "link": "#/explore" },
          { "title": "Logout", "link": "#/logout" }
      ];

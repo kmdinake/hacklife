@@ -3,6 +3,7 @@
     <div class="dashboard w3-animate-top">
         <h1>Welcome {{userFullname}}</h1>
         <div class="grid">
+
             <div class="item w3-card-4" ng-click="goRouteTo('/my_datasets');">
                 <div class="icon">
                     <img src="../css/media/icons/d_w_96.png" alt="view datasets" />
@@ -19,6 +20,14 @@
                     <span>Data Tools</span>
                 </div>
             </div>
+            <div class="item w3-card-4" ng-click="goRouteTo('/statistics');">
+                <div class="icon">
+                    <img src="../css/media/icons/e_w_96.png" alt="view statistics" />
+                </div>
+                <div class="caption">
+                    <span>Statistics</span>
+                </div>
+            </div>
             <div class="item w3-card-4" ng-click="goRouteTo('/explore');">
                 <div class="icon">
                     <img src="../css/media/icons/h_w_96.png" alt="explore datasets" />
@@ -27,6 +36,7 @@
                     <span>Explore</span>
                 </div>
             </div>
+
         </div>
         <div class="additionalInfo">
             <!-- Add some content for the dashboard -->

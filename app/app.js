@@ -35,6 +35,10 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
             templateUrl: 'views/data-tools.html',
             controller: 'UserController'
         })
+        .when('/statistics', {
+            templateUrl: 'views/statistics.html',
+            controller: 'UserController'
+        })
         .when('/explore', {
             templateUrl: 'views/explore.html',
             controller: 'UserController'

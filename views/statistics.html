@@ -1,86 +1,8 @@
+
 <div class="container-fluid">
     <nav class="w3-card-2 navbar navbar-default navbar-fixed-top" ng-include="'views/nav.html'"></nav>
-    <button class="w3-card-4 w3-right upload-btn" data-toggle="modal" data-target="#uploadModal">
-        Upload Dataset
-    </button>
-    <div id="uploadModal" class="modal fade uploader" role="dialog">
-            <div class="modal-dialog uploader">
-
-                <!-- Modal content-->
-                <div class="modal-content uploader">
-                    <div class="modal-header">
-                        <div class="close-upload" style="float:right" data-dismiss="modal">
-                            <img src="../css/media/icons/c_b_48.png"/>
-                        </div>
-                        <h4 class="modal-title">Upload Your Data</h4>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <span class="glyphicon glyphicon-cloud-upload"></span>
-                                <h3>Schema upload</h3>
-                                <div>
-                                    <form>
-                                        <div class="uploadInput">
-                                            <span>Choose File</span>
-                                            <input ngf-select ngf-max-height="1000" value="Select Schema File" type="file" ng-model="fileToUp" kind=".csv" class="uploadBtn">
-                                        </div>
-                                        <button class="btn" ng-click="uploadFiles('schema')">Upload Schema</button>
-                                    </form>
-                                    <span>
-                                        <p>The file should be a csv file containing a comma separated list of the column names in the dataset.</p>
-                                    </span>
-                                </div>
-
-                                <!-- Test -->
-
-                                <ul>
-                                    <li ng-repeat="f in file" style="font:smaller">{{f.name}} {{f.$errorParam}}
-                                      <span class="progress" ng-show="f.progress >= 0">
-                                        <div style="width:{{f.progress}}%"
-                                            ng-bind="f.progress + '%'"></div>
-                                      </span>
-                                    </li>
-                                    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                                    </li>
-                                </ul>
-
-                                <!-- END -->
-
-                                <h3>Dataset upload</h3>
-                                <div>
-                                    <form>
-                                        <div class="uploadInput">
-                                            <span>Choose File</span>
-                                            <input ngf-select ngf-max-height="1000" value="Select File" type="file" ng-model="fileToUp" kind=".csv, .json, .xlsx, .xml" class="uploadBtn">
-                                        </div>
-                                        <button class="btn" ng-click="uploadFiles('dataset')">Upload Dataset</button>
-                                    </form>
-                                    <span>
-                                        <p>The file should be a csv, xlsx, xls, json or xml file.</p>
-                                    </span>
-                                </div>
-
-                                <!-- <div class="uploadInput">
-                                    <span>Choose Files</span>
-                                    <input id="upload-input" type="file" name="uploads[]" multiple="multiple" class="uploadBtn">
-                                </div>
-                                <button class="btn upload-btn" type="button" class="executeUpload">Upload File</button> -->
-                            </div>
-                        </div>
-
-
-                        </br>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
     <div ng-if="!activeDataset" class="datasets w3-animate-top">
-        <h1>My Datasets</h1>
+        <h1>Statistics</h1>
         <div class="grid" ng-if="datasets.length > 0">
             <div class="item w3-card-4" ng-repeat="d in datasets" ng-click="setActiveDataset(d);">
                 <div class="icon">

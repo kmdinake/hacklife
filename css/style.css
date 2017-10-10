@@ -153,7 +153,9 @@ ul.nav.navbar-nav a:hover {
     text-align: center;
     color: #fff;
     font-family: "Raleway", sans-serif;
-    background-image: url('media/images/graph3.jpg');
+    background-image: url('media/images/graph3.jpg');    
+    background-repeat: repeat;
+    background-size: 100% 100%;
 }
 
 .landing .title{
@@ -200,14 +202,15 @@ ul.nav.navbar-nav a:hover {
     justify-content: space-between;
 }
 
-.dashboard .grid .item{
+.dashboard .grid .item {
+	max-width: 300px;
     width: 20vw;
     text-align: center;
     background-color: #3498db;/*#0CB4DA;*/
     flex: 1;
     margin: 0px 20px 0px 0px;
 }
-.dashboard .grid .item:nth-child(3){
+.dashboard .grid .item:nth-child(4){
     margin: 0px 0px 0px 0px;
 }
 

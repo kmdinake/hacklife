@@ -19,6 +19,22 @@ app.config(['$locationProvider', '$routeProvider', function($locationProvider, $
             templateUrl: 'views/login.html',
             controller: 'LoginController'
         })
+        .when('/logout', {
+            templateUrl: 'views/login.html',
+            controller: 'LoginController',
+            resolve: {
+                data: function($http){
+                    $http.post('/executeLogout', { userEmail : sessionStorage.getItem("userEmail") }).then(
+                        function(res){
+                            console.log('Logout successful for user ID: ' + sessionStorage.getItem("userEmail"))
+                        },
+                        function(err){
+                            console.log('Logout unsuccessful for user ID: ' + sessionStorage.getItem("userEmail"))
+                        }
+                    );
+                }
+            }
+        })
         .when('/register', {
             templateUrl: 'views/register.html',
             controller: 'RegisterController'

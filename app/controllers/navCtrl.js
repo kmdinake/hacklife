@@ -4,7 +4,9 @@
  * Date: 17 Dec 2016
  */
 
- app.controller('NavbarController', ['$scope', '$location'/*, 'NavbarService'*/, function NavbarController($scope, $location/*, NavbarService*/){
+app.controller('NavbarController', [
+'$scope', '$location', 'UserService', 
+function NavbarController($scope, $location, UserService){
      /* Main Navbar */
      $scope.menuItems = [
          { "title": "Dashboard", "link":"#/dashboard" },
@@ -15,18 +17,18 @@
      ];
 
      $scope.main = function(){
-          /*NavbarService.checkLogin().then(
-               function success(response){
-                    if(response.status != 200 || response.data != true){
+          UserService.checkLogin(sessionStorage.getItem("userEmail")).then(
+              function success(response){
+                    if(response.status != 200 || response.data.result != "true"){
                          console.log("NavAuth Failed\nErrCode: " + response.status + "\nErrMsg: " + response.statusText);
-                         $location.url('#/');
+                         $location.path('/');
                     }
               },
               function err(response){
                    console.log("NavAuth Failed\nErrCode: " + response.status + "\nErrMsg: " + response.statusText);
-                   $location.url('#/');
+                   $location.path('/');
               }
-         );*/
+         );
      };
      $scope.main();
 

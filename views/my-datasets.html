@@ -29,25 +29,15 @@
                                         </div>
                                         <button class="btn" ng-click="uploadFiles('schema')">Upload Schema</button>
                                     </form>
-                                    <span>
+                                    <div class="progressBar">
+                                        <span class="progress" ng-show="fileToUp.progress >= 0">
+                                          <div style="width:{{fileToUp.progress}}%" ng-bind="fileToUp.name + ': ' + fileToUp.progress + '%'"></div>
+                                        </span>
+                                    </div>
+                                    <span class='message'>
                                         <p>The file should be a csv file containing a comma separated list of the column names in the dataset.</p>
                                     </span>
                                 </div>
-
-                                <!-- Test -->
-
-                                <ul>
-                                    <li ng-repeat="f in file" style="font:smaller">{{f.name}} {{f.$errorParam}}
-                                      <span class="progress" ng-show="f.progress >= 0">
-                                        <div style="width:{{f.progress}}%"
-                                            ng-bind="f.progress + '%'"></div>
-                                      </span>
-                                    </li>
-                                    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
-                                    </li>
-                                </ul>
-
-                                <!-- END -->
 
                                 <h3>Dataset upload</h3>
                                 <div>
@@ -58,6 +48,11 @@
                                         </div>
                                         <button class="btn" ng-click="uploadFiles('dataset')">Upload Dataset</button>
                                     </form>
+                                    <div class="progressBar">
+                                        <span class="progress" ng-show="fileToUp.progress >= 0">
+                                          <div style="width:{{fileToUp.progress}}%" ng-bind="fileToUp.name + ': ' + fileToUp.progress + '%'"></div>
+                                        </span>
+                                    </div>
                                     <span>
                                         <p>The file should be a csv, xlsx, xls, json or xml file.</p>
                                     </span>

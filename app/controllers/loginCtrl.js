@@ -1,6 +1,7 @@
 app.controller('LoginController', ['$scope', '$rootScope', '$route', '$location', 'UserService', function LoginController($scope, $rootScope, $route, $location, UserService){
 		$scope.email = "";
 		$scope.password = "";
+		$scope.loginMessage = "Please Login";
 
 		$scope.writeToSessionStorage = function(email){
 			window.sessionStorage.setItem("userEmail", email);
@@ -25,6 +26,7 @@ app.controller('LoginController', ['$scope', '$rootScope', '$route', '$location'
 		                window.setTimeout(function(){
 		                    $route.reload();
 		                }, 3000);
+		                $scope.loginMessage = "Login Failed";
 		            }
 	            },
 	            function err(response) {

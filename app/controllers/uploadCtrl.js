@@ -17,6 +17,7 @@ app.controller('UploadController', ['$scope', 'Upload', function ($scope, Upload
             $scope.fileToUp.upload.then(
             function (evt) {
                 $scope.fileToUp.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                $scope.fileToUp.displayProgress = $scope.fileToUp.name + ': ' + $scope.fileToUp.progress + '%'; 
                 console.log($scope.fileToUp.progress);
             },
             function (res) {

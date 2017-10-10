@@ -15,5 +15,11 @@ app.factory('UserService', ['$http', function($http){
         return $http.post('/getUserFullname', { userEmail: userEmail });
     };
 
+    userServiceObj.checkLogin = function(userEmail){
+        return $http.post('/checkLogin', { userEmail: userEmail });
+    };
+
+
+
     return userServiceObj;
 }]);

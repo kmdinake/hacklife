@@ -5,6 +5,7 @@ app.controller('RegisterController', ['$scope', '$route', '$location', 'UserServ
     $scope.surname = "";
     $scope.email = "";
     $scope.password = "";
+    $scope.loginMessage = "Please Register";
 
     $scope.createNewUser = function(){
     	var newUser = {};
@@ -22,7 +23,8 @@ app.controller('RegisterController', ['$scope', '$route', '$location', 'UserServ
 	                window.setTimeout(function(){
 	                    $route.reload();
 	                }, 3000);
-	            }
+                $scope.loginMessage = "Registration Failed";
+                }
             },
             function err(response) {
                 var msg = "Ooops! Well this is embarrasing. Sign Up Failed! ("+response.statusText+')';

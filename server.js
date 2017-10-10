@@ -100,6 +100,9 @@ app.post('/executeLogin', function (req, res) {
 
 	console.log("Login req received. Email: " + req.body.user.email);
 
+	// Set the session verification
+	req.session.userEmail = req.body.user.email;
+
 	var sendPyReq = '{\"email\":\"' + req.body.user.email + '\",\"password\":\"' + req.body.user.password + '\"}';
 
 	var options = {
@@ -112,7 +115,7 @@ app.post('/executeLogin', function (req, res) {
 	PythonShell.run('/scripts/repository/User_Auth.py', options, function (err, results) {
 		if (err){
 			console.log("An error occured while trying to login: " + err);
-			res.write("failed");
+			res.write(JSON.stringify({ result: "failed" }));
 			res.end();
 		} else {
 			console.log("User Login Returned. Output: " + results);
@@ -126,6 +129,47 @@ app.post('/executeLogin', function (req, res) {
 		}
 	});
 
+});
+
+app.post('/executeLogout', function(req, res){
+	//Clear the node session
+	req.session.destroy(function(err){
+		if(err){
+			res.write("failed");
+			res.end();
+			return;
+		}
+		res.write("success");
+		res.end();
+	});
+});
+
+app.post('/checkLogin', function(req, res){
+	var options = {
+		mode: 'text',
+		pythonPath: 'python3',
+		scriptPath: '',
+		args: [JSON.stringify(req.body)]
+	};
+
+
+	PythonShell.run('/scripts/repository/check_login.py', options, function (err, results) {
+		if (err){
+			console.log("An error occured while trying to check neo for logged in user: " + err);
+			res.write("failed");
+			res.end();
+		} else {
+			console.log("Neo successfully checked for user: " + results);
+			res.setHeader('Content-Type', 'application/json');
+			if(req.body.userEmail != req.session.userEmail || results.result == "false"){
+				res.write(JSON.stringify({ result: "false"}));		
+			} else {
+				res.write(JSON.stringify({ result: "true"}));		
+			}
+		
+			res.end();
+		}
+	});
 });
 
 //New queries - User Service
